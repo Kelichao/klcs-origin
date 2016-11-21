@@ -70,7 +70,12 @@
 		// 为了防止命名冲突，内部采用key变量
 		window.keyer = _key;
 
-		return keyer;
+		// 兼容 AMD 规范
+		if (typeof define === 'function' && define.amd) {
+		  define('keyer', [], function() {
+		    return key;
+		  });
+		}
 
 }));
 
