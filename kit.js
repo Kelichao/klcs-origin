@@ -36,6 +36,7 @@
 
 	// 类型映射,目前是11种
 	var typeMap = {
+		"isObject":     "[object Object]",
 		"isArray":      "[object Array]",
 		"isBoolean":    "[object Boolean]",
 		"isFunction":   "[object Function]",
@@ -65,24 +66,27 @@
 
 	creatrTypeFunction(typeMap);
 
-	// 这个forEach只负责用来遍历对象属性
+	// forEach负责用来遍历对象/数组属性
 	kit.forEach = function(total, fn, context) {
 
-		if (isObject === true) {
+		if (kit.isObject(total) === true) {
 			for(var i in total) {
 				fn(total[i], i);
 			}
-		} else if (isArray === true) {
-
+		} else if (kit.isArray(total) === true) {
+			var i = 0;
+			for (; i<total.length ;i++) {
+				fn(total[i], i);
+			}
 		}
 	};
 
-	/*
-	 * address为需要解析成对象的地址串
-	 * key为需要取得的键值
-	 */
-	kit.locaSearch = function(address, key){
-	    var str = decodeURIComponent(address || location.search),
+	
+	// address为需要解析成对象的地址串
+	// key为需要取得的键值
+	 
+	kit.locaSearch = function(key,address){
+	    var str = decodeURIComponent(address || root.location.search),
 	        arr = [],
 	        obj = {},
 	        first = "",
@@ -103,11 +107,37 @@
 	            obj[first] = final;
 	        }
 	    }
+
 	    if (!!key) {
 	    	obj = obj[key];
 	    }
 	    return obj;
 	};
+
+	// cookie对象获取函数
+	kit.cookie = function(key,cook) {
+
+		var cookie = cook || root.document.cookie,
+			obj = {},
+			first = null,
+			end = null,
+			cont = "",
+		    cookieArr = cookie.split(",");
+
+		kit.forEach(cookieArr,function(value,key) {
+
+			cont =value.split("=");
+			first = cont[0];
+			end = cont[1];
+			obj[first] = end;
+		});
+
+		if (!!key) {
+			obj = obj[key];
+		}
+
+		return obj;
+	}
 
 	window.kit = kit;
 
