@@ -72,9 +72,11 @@
 
 		// 兼容 AMD 规范
 		if (typeof define === 'function' && define.amd) {
-		  define('keyer', [], function() {
-		    return key;
-		  });
+
+		    // 要求是define包裹，然后返回整个key对象即可
+		    define('keyer', [], function() {
+		        return key;
+		    });
 		}
 
 }));
