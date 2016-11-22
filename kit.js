@@ -7,7 +7,7 @@
 
 ;(function() {
 
-	// root 的值, 客户端为window, 服务端(node) 中为 globe
+	// root 的值, 客户端为window, 服务端(node) 中为 exports
 	var root = this;
 
 	// 判断对象类型
@@ -33,6 +33,24 @@
 		 */
 		// return this;
 	};
+
+	// 兼容node模块
+	// node中有exports模块用于导出某个js文件
+	if (typeof exports !== 'undefined') {
+	  if (typeof module !== 'undefined' && module.exports) {
+
+	  	// 兼容老的require() API
+	    exports = module.exports = kit;
+	  }
+
+	  // 新版的node绑定
+	  exports.kit = kit;
+
+	} else {
+		// 把整体绑定在全局变量
+		// 浏览器环境为window.kit
+	    root.kit = kit;
+	}
 
 	kit.isObject = function(obj) {
 		return kind.call(obj) === "[object Object]";
@@ -86,18 +104,22 @@
 	};
 
 	// 去除字符串两边的空格
+	// 如果有第二个参数，则把所有空格删除
 	// kit.trim("  dsfdsa=- 234.;df  ");
-	kit.trim = function(str) {
-		var whitespace = "\s";
-		var totalStr = str.replace(/^\s+((\S|\s)*)\s$/g, "$1");
-		//jq写法   str.replace(/^\s+|((?:^|[^\\\\])(?:\\\\.)*)\s+$/g, "$1")
+	kit.trim = function(str,state) {
+		var totalStr = "";
+
+		if (state === true) {
+			totalStr = str.replace(/\s/g, "");
+			return totalStr;
+
+		}
+		
+		totalStr = str.replace(/^\s+|((?:^|[^\\\\])(?:\\\\.)*)\s+$/g, "$1");
+		// 失败：如果末尾有两个以上的空格就读取失败了 str.replace(/^\s+((\S|\s)*)\s+$/g, "$1");
+		// jq写法   str.replace(/^\s+|((?:^|[^\\\\])(?:\\\\.)*)\s+$/g, "$1");
 		return totalStr;
 	};
-
-	// 拆分有空格的字符串，不管多少空格
-	kit.truncate = function(str) {
-
-	}
 
 	// 拆分规律字符串函数
 	// key键值， string输入的串，type分割类型，flag是否除去首个问号字符
@@ -112,7 +134,7 @@
 	    if (typeof str == 'string' && str.length != 0) {
 
 	    	// 注意，window.location.search 截取的串都是带问号的
-			// 如果有问号则去除问号    	 
+			// 如果有问号则去除问号
 			if (flag) {
 				str = str.search(/^\?/g) !== -1 ? str.substring(1) : str;
 			}
@@ -123,7 +145,7 @@
 	            first = cont[0];
 				final = cont[1];
 	            obj[first] = final;
-	        })
+	        });
 	    }
 
 	    if (!!key) {
@@ -196,7 +218,6 @@
 		return result;
 	};
 
-	window.kit = kit;
 
 	// 兼容 AMD 规范
 	if (typeof define === 'function' && define.amd) {
