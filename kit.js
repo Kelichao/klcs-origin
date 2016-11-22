@@ -34,9 +34,12 @@
 		// return this;
 	};
 
+	kit.isObject = function(obj) {
+		return kind.call(obj) === "[object Object]";
+	};
+
 	// 类型映射,目前是11种
 	var typeMap = {
-		"isObject":     "[object Object]",
 		"isArray":      "[object Array]",
 		"isBoolean":    "[object Boolean]",
 		"isFunction":   "[object Function]",
@@ -56,6 +59,7 @@
 		for(item in object) {
 
 			// 将方法挂载到对象上,每个item一个闭包空间来去除闭包影响
+			// underscore用forEach生产，原理跟这个一样,后期可以调整
 			kit[item] = (function(val) {
 				return function(total) {
 					return kind.call(total) === object[val];
@@ -81,63 +85,116 @@
 		}
 	};
 
-	
-	// address为需要解析成对象的地址串
-	// key为需要取得的键值
-	 
-	kit.locaSearch = function(key,address){
-	    var str = decodeURIComponent(address || root.location.search),
+	// 去除字符串两边的空格
+	// kit.trim("  dsfdsa=- 234.;df  ");
+	kit.trim = function(str) {
+		var whitespace = "\s";
+		var totalStr = str.replace(/^\s+((\S|\s)*)\s$/g, "$1");
+		//jq写法   str.replace(/^\s+|((?:^|[^\\\\])(?:\\\\.)*)\s+$/g, "$1")
+		return totalStr;
+	};
+
+	// 拆分有空格的字符串，不管多少空格
+	kit.truncate = function(str) {
+
+	}
+
+	// 拆分规律字符串函数
+	// key键值， string输入的串，type分割类型，flag是否除去首个问号字符
+	var strToObject = function(key, string, type ,flag) {
+	    var str = decodeURIComponent(string),
 	        arr = [],
 	        obj = {},
-	        first = "",
-	        final = "";
+	        first = null,
+	        final = null,
+	        cont = "";
 
 	    if (typeof str == 'string' && str.length != 0) {
 
-	    	/*
-	    	 * 注意，window.location.search 截取的串都是带问号的
-			 * 如果有问号则去除问号
-	    	 */
-	        str = str.search(/^\?/g) !== -1 ? str.substring(1) : str;
-	        arr = str.split("&");
+	    	// 注意，window.location.search 截取的串都是带问号的
+			// 如果有问号则去除问号    	 
+			if (flag) {
+				str = str.search(/^\?/g) !== -1 ? str.substring(1) : str;
+			}
 
-	        for(var i=0; i<arr.length; i++) {
-	            first = arr[i].split("=")[0];
-	            final = arr[i].split("=")[1];
+	        arr = str.split(type);
+	        kit.forEach(arr,function(value, key) {
+	        	cont =value.split("=");
+	            first = cont[0];
+				final = cont[1];
 	            obj[first] = final;
-	        }
+	        })
 	    }
 
 	    if (!!key) {
 	    	obj = obj[key];
 	    }
+
 	    return obj;
 	};
 
+	
+	// address为需要解析成对象的地址串
+	// key为需要取得的键值
+	kit.locaSearch = function(key, address){
+
+		address = address || root.location.search;
+		var total = strToObject(key, address, "&", true);
+	    
+	    // 测试用例kit.locaSearch("fsd","?sfsd=3423&we=234&fsd=324");
+	    return total;
+	};
+
 	// cookie对象获取函数
-	kit.cookie = function(key,cook) {
+	kit.cookie = function(key,cookie) {
 
-		var cookie = cook || root.document.cookie,
-			obj = {},
-			first = null,
-			end = null,
-			cont = "",
-		    cookieArr = cookie.split(",");
+		cookie = cookie || root.document.cookie;
+		var total = strToObject(key, cookie, ";", false);
+		    
+		// 测试用例kit.cookie("bbb","aaa=123;bbb=789");
+		return total;
+	};
 
-		kit.forEach(cookieArr,function(value,key) {
+	// 克隆方法
+	kit.clone = function(total, flag) {
 
-			cont =value.split("=");
-			first = cont[0];
-			end = cont[1];
-			obj[first] = end;
-		});
+		// 深度克隆
+		if (flag === true) {
 
-		if (!!key) {
-			obj = obj[key];
+			// 用递归方法拷贝深层次对象
+			var result = (function (cont) {
+
+				//这里增加了数组处理，暂时还不清楚函数体如何进行复制。
+				var object = (cont instanceof Array) ? [] : {};
+
+				// 注意这里不能用forEach,不然就得不到arguments.callee作用域
+				for (var i in cont) {
+					
+					// 如果是一个引用对象			
+					if (kit.isObject(cont[i]) === true) {
+						object[i] = arguments.callee(cont[i]); 	
+
+					// 如果是一个简单对象，则直接赋值		
+					} else {
+						object[i] = cont[i];		
+					}
+				} 
+				return object;
+			})(total);
+
+		// 浅复制
+		} else {
+
+			//这里增加了数组处理，暂时还不清楚函数体如何进行复制。
+			var result = (total instanceof Array) ? [] : {};
+
+			kit.forEach(total, function(value, key) {
+				result[key] = value;
+			})
 		}
 
-		return obj;
-	}
+		return result;
+	};
 
 	window.kit = kit;
 
