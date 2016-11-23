@@ -1,4 +1,4 @@
-# kit.js
+# kit.js [(链接地址)](https://github.com/Kelichao/kit.js/blob/master/kit.js)
 
 ### 方法:借鉴底线库的工具框架，包含一些常用方法，在兼容AMD模式的同时，兼顾了CMD，在seaJS中也能够正常包装
 <table>
