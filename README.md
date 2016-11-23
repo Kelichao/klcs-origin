@@ -1,8 +1,5 @@
 # kit.js
 
-## [frontendDaily](https://github.com/kujian/frontendDaily/issues) 
-☆☆☆每天会发布一篇[码农头条](http://hao.caibaojian.com)上的`前端开发`文章☆☆☆.
-
 ### 方法:借鉴底线库的工具框架，包含一些常用方法，在兼容AMD模式的同时，兼顾了CMD，在seaJS中也能够正常包装
 <table>
 <tr>
