@@ -3,6 +3,14 @@
 ### 方法:借鉴底线库的工具框架，包含一些常用方法，在兼容AMD模式的同时，兼顾了CMD，在seaJS中也能够正常包装
 <table>
 <tr>
+	<td>kit.method</td> 
+	<td>为对象上挂载的函数体排序生成数组名，除去变量值</td>
+</tr>
+<tr>
+	<td>kit.extend</td> 
+	<td>通过浅复制，继承当前对象的方法</td>
+</tr>
+<tr>
 	<td>kit.isArray </td> <td>判断是否为数组</td>
 </tr>
 <tr>
@@ -32,4 +40,41 @@
 <tr>
 	<td>kit.isError</td> <td>判断是否是Error</td>
 </tr>
+<tr>
+	<td>kit.forEach/kit.each</td>
+	 <td>负责用来遍历对象/数组属性,按照ES5标准，与jq参数位置不同</td>
+</tr>
+<tr>
+	<td>kit.trim</td>
+	 <td>去除字符串两边的空格，如果有第二个参数，则把所有空格删除</td>
+</tr>
+<tr>
+	<td>kit.locaSearch</td> 
+	<td>第一个参数为需要取得的键值，第二个为需要解析成对象的地址串，如果不传为location.search</td>
+</tr>
+<tr>
+	<td>kit.cookie</td> 
+	<td>第一个参数为需要取得的键值，第二个为需要解析成对象的地址串，如果不传为document.cookie</td>
+</tr>
+<tr>
+	<td>kit.clone</td> 
+	<td>第一个参数为克隆对象，如果第二个参数是true则使用递归深度复制</td>
+</tr>
+<tr>
+	<td>kit.query</td> 
+	<td>封装了document.querySelector</td>
+</tr>
+<tr>
+	<td>kit.querys</td> 
+	<td>封装了docuemnt.querySelectorAll</td>
+</tr>
+<tr>
+	<td>kit.CLIENT_USERID</td> 
+	<td>保存了cookie中"userid"字段</td>
+</tr>
+<tr>
+	<td>kit.ta</td> 
+	<td>埋点快捷方式，传入对象{"ibyf130_3242": ".class1","iby2345_fre4": ".class2"} 进行dom绑定，如果传入数组，则是载入页面调用</td>
+</tr>
+
 </table>
