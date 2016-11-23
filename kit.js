@@ -2,7 +2,7 @@
  * @description: 较为常用的工具集合
  * @author: kelichao
  * @update: 2016-11-19
- * @https://github.com/Kelichao/keyer.js
+ * @https://github.com/Kelichao/kit.js
 */
 
 ;(function() {
@@ -36,6 +36,7 @@
 
 	// 兼容node模块
 	// node中有exports模块用于导出某个js文件
+	// node中可以用CMD模式调用此文件：var MATH = require("./MATH") 
 	if (typeof exports !== 'undefined') {
 	  if (typeof module !== 'undefined' && module.exports) {
 
@@ -116,7 +117,8 @@
 		}
 		
 		totalStr = str.replace(/^\s+|((?:^|[^\\\\])(?:\\\\.)*)\s+$/g, "$1");
-		// 失败：如果末尾有两个以上的空格就读取失败了 str.replace(/^\s+((\S|\s)*)\s+$/g, "$1");
+		// 失败：如果末尾有两个以上的空格就读取失败了
+		// str.replace(/^\s+((\S|\s)*)\s+$/g, "$1");
 		// jq写法   str.replace(/^\s+|((?:^|[^\\\\])(?:\\\\.)*)\s+$/g, "$1");
 		return totalStr;
 	};
@@ -218,6 +220,62 @@
 		return result;
 	};
 
+	var query = function(id) {
+		return document.querySelector(id);
+	};
+
+	var selects = function(class1) {
+		return document.querySelectorAll(class1);
+	};
+
+	// 客户端用户id
+	var CLIENT_USERID;
+	kit.CLIENT_USERID = CLIENT_USERID = kit.cookie("userid");
+
+	// i客户端埋点快捷方法
+	// 调用此方法之前需要引入TA.js
+	// 此类对象方式需要点击，保险起见是mousedown
+	/*
+		{
+			"ibyf130_3242": ".class1",
+			"iby2345_fre4": ".class2"
+		}
+	*/
+	// 数组方式["ibyf130_3242","iby2345_fre4"]
+	// 网页加载后直接触发
+	kit.ta = function(param) {
+
+		if (typeof TA === "undefined") {
+			console.warn("未引入TA.js");
+			return;
+		}
+
+		if (kit.isObject(param)) {
+			if (typeof $ === "function") {
+				kit.forEach(param, function(value, key) {
+					$(document).on("mousedown", value, function() {
+						// 触发埋点方式
+						TA.log({
+							"id": key,
+							"ld": "client",
+							"client_userid": CLIENT_USERID,
+							"send_time": "" 
+						})
+					})
+				});
+			}
+		} else if (kit.isArray(param)) {
+			kit.forEach(param, function(value, key) {
+				// 触发埋点方式
+				TA.log({
+					"id": value,
+					"ld": "client",
+					"client_userid": CLIENT_USERID,
+					"send_time": "" 
+				})
+			})
+		}
+	};
 
 	// 兼容 AMD 规范
 	if (typeof define === 'function' && define.amd) {
