@@ -13,18 +13,34 @@
 	// 判断对象类型
 	var kind = Object.prototype.toString;
 
+	// 方法简写
+	var ArrayProto = Array.prototype, 
+		ObjProto = Object.prototype, 
+		FuncProto = Function.prototype;
+
+	var push = ArrayProto.push,
+		pop = ArrayProto.pop,
+    	slice = ArrayProto.slice;
+
 	// 安全构造函数法
 	var kit = function(obj) {
 
 		// 如果传入了参数，且参数是A的实例对象，直接返回该参数对象
 		// 否则就把obj当参数使用了
-		if (obj instanceof A)
-		  return obj;
+		if (obj instanceof kit) {
+		    return obj;
+		}
 
 		// 如果忘记了实例化，this的prototype就没有保存着A的prototype地址
-		if(!(this instanceof A)) {
+		if(!(this instanceof kit)) {
 			return new kit(obj);
 		}
+
+		// 如果obj并不是kit的实例
+		// 且这里已经处于正常实例化阶段
+		// 用于OOP方式调用，将传入的对象赋值给内部对象
+		// wrapped仅仅用来保存对象
+		this._wrapped = obj;
 
 		/*
 		 * 在new状态下，return返回的都是当前的this ->
@@ -33,6 +49,9 @@
 		 */
 		// return this;
 	};
+
+	//原型对象挂载简写
+	fn = kit.fn = kit.prototype;
 
 	// 兼容node模块
 	// node中有exports模块用于导出某个js文件
@@ -90,13 +109,13 @@
 	creatrTypeFunction(typeMap);
 
 	// forEach负责用来遍历对象/数组属性
-	kit.forEach = function(total, fn, context) {
+	kit.each = kit.forEach = function(total, fn, context) {
 
-		if (kit.isObject(total) === true) {
+		if (kit.isObject(total) || kit.isFunction(total)) {
 			for(var i in total) {
 				fn(total[i], i);
 			}
-		} else if (kit.isArray(total) === true) {
+		} else if (kit.isArray(total)) {
 			var i = 0;
 			for (; i<total.length ;i++) {
 				fn(total[i], i);
@@ -276,6 +295,67 @@
 			})
 		}
 	};
+
+	// 内部对挂载的方法按名称进行排序
+	kit.method = function(fn) {
+
+		var names = [];
+		kit.forEach(fn, function(fn, name) {
+			if(kit.isFunction(fn)) {
+				names.push(name);
+			}
+		});
+
+		return names.sort();
+	}
+
+	// 为了能使用OOP形式的调用，将kit的所有方法挂载到原型
+	// 去除不是function类型的。
+	// 用于添加自定义方法
+	/*
+		// 用法
+		kit.extend({
+			"kelichao":function() {
+				console.log("name");
+			}
+		})
+	*/
+	kit.extend = function(obj) {
+
+		// 参考了underscore
+		// 得到排序后的所有方法名数组
+		var sortFuncName = kit.method(obj);
+		kit.forEach(sortFuncName, function(value, key) {
+
+			// 1.挂载到对象名下
+			// 2.挂载到原型链上
+			// 3.先保存下当前函数地址(后面用于wrapped)
+			var func = kit[value] = obj[value];
+
+			// OOP调用,对方法内部传入参数进行修改
+			// 否则一般写法为 fn[value] = func;
+			fn[value] = function() {
+
+				// 第一个参数
+				// 由于这里调用点是kit的实例对象
+				// this是当前的kit实例对象
+				var args = [this._wrapped];
+
+				// arguments 为 name 方法需要的其他参数
+				// 用arguments拿参数的好处是不需要制定形参名
+				// 通过apply调用可以一次性传入多个数组
+				// 不管有几个参数，我都可以拿到。
+				// 执行后args组成一个新数组，包含agruments
+				// 把第一个参数改为实例对象
+				push.apply(args, arguments);
+
+				// 将this指向kit ,传入改造后的参数组
+				return func.apply(kit, args);
+			}
+		});
+	};
+
+	kit.extend(kit);
 
 	// 兼容 AMD 规范
 	if (typeof define === 'function' && define.amd) {
