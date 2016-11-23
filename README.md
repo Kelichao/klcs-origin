@@ -6,6 +6,7 @@
 借鉴底线库的工具框架，包含一些常用方法，在兼容AMD模式的同时，兼顾了CMD，在seaJS中也能够正常包装
 
 # 方法:
+<table>
 <tr>
 	<td>kit.isArray </td> <td>判断是否为数组</td>
 </tr>
@@ -36,3 +37,4 @@
 <tr>
 	<td>kit.isError</td> <td>判断是否是Error</td>
 </tr>
+</table>
