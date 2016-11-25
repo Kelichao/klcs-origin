@@ -20,6 +20,7 @@
 
 	var push = ArrayProto.push,
 		pop = ArrayProto.pop,
+		href = root.location.href,
     	slice = ArrayProto.slice;
 
 	// 安全构造函数法
@@ -162,9 +163,9 @@
 
 	        arr = str.split(type);
 	        kit.forEach(arr,function(value, key) {
-	        	cont =value.split("=");
-	            first = cont[0];
-				final = cont[1];
+	        	cont = value.split("=");
+	            first = kit.trim(cont[0]);
+				final = kit.trim(cont[1]);
 	            obj[first] = final;
 	        });
 	    }
@@ -309,9 +310,15 @@
 		return names.sort();
 	}
 
+	// 调用客户端下载框
+	kit.clientDown = function(name, type, url) {
+		href = "ifind://!command=down&valuectrl=1&filename=" +
+				name + "." + type +
+	}
+
 	// 为了能使用OOP形式的调用，将kit的所有方法挂载到原型
 	// 去除不是function类型的。
-	// 用于添加自定义方法
+	// 用于添加自定义方法，此方法放到最后执行
 	/*
 		// 用法
 		kit.extend({
