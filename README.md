@@ -76,5 +76,8 @@
 	<td>kit.ta</td> 
 	<td>埋点快捷方式，传入对象{"ibyf130_3242": ".class1","iby2345_fre4": ".class2"} 进行dom绑定，如果传入数组，则是载入页面调用</td>
 </tr>
-
+<tr>
+	<td>kit.clientDown</td> 
+	<td>快速调用客户端下载弹窗1：下载文件取名，2：文件类型，3：文件下载地址</td>
+</tr>
 </table>
