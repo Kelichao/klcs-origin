@@ -14,6 +14,10 @@
 	var kind = Object.prototype.toString;
 
 	// 方法简写
+	// 缓存变量, 便于压缩代码
+  	// 此处「压缩」指的是压缩到 min.js 版本
+  	// 而不是 gzip 压缩
+  	// 同时可减少在原型链中的查找次数(提高代码效率
 	var ArrayProto = Array.prototype, 
 		ObjProto = Object.prototype, 
 		FuncProto = Function.prototype;
