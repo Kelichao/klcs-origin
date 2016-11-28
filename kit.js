@@ -313,8 +313,18 @@
 	// 调用客户端下载框
 	kit.clientDown = function(name, type, url) {
 		href = "ifind://!command=down&valuectrl=1&filename=" +
-				name + "." + type +
+				name + "." + 
+				type + "&url=http://" + document.location.host + 
+				url; 
+
+		root.location.href = href;
 	}
+
+	// 拆分一个字符串中间有间隔的字符串
+	// 如："aaa    bbb cc    ddd"
+	kit.splitSpace = function(str) {
+		return str.split(/\s+/g);
+	};
 
 	// 为了能使用OOP形式的调用，将kit的所有方法挂载到原型
 	// 去除不是function类型的。
