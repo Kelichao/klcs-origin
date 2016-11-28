@@ -80,4 +80,8 @@
 	<td>kit.clientDown</td> 
 	<td>快速调用客户端下载弹窗1：下载文件取名，2：文件类型，3：文件下载地址</td>
 </tr>
+<tr>
+	<td>kit.splitSpace</td> 
+	<td>按照空格分割字符串</td>
+</tr>
 </table>
