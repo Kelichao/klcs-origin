@@ -91,4 +91,9 @@
 	<td>kit.once</td> 
 	<td>执行一次函数包装器</td>
 </tr>
+<tr>
+	<td>kit.mixin</td> 
+	<td>拷贝属性的方法，第一个参数如果填布尔值则是深度复制，后面跟需要拷贝的对象，方法属性都会挂载到第一个对象上面
+	kit.mixin( [deep ], target, object1 [, objectN ] )...</td>
+</tr>
 </table>
