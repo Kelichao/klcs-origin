@@ -330,6 +330,18 @@
 		return str.split(/\s+/g);
 	};
 
+	// 执行一次的函数包装器
+	kit.once = function(fn) {
+			var totalFn = fn;
+			if (kit.isFunction(totalFn) === false) {
+				throw "请传入函数方法";
+			}
+			return function() {
+				totalFn();
+				totalFn = new Function();
+			}
+		}
+
 	// 为了能使用OOP形式的调用，将kit的所有方法挂载到原型
 	// 去除不是function类型的。
 	// 用于添加自定义方法，此方法放到最后执行
