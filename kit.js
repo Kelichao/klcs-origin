@@ -59,30 +59,43 @@
 	fn = kit.fn = kit.prototype;
 
 	// 兼容node模块
-	// node中有exports模块用于导出某个js文件
+	// node中有exports/module.exports模块用于导出某个js文件
 	// node中可以用CMD模式调用此文件：var MATH = require("./MATH") 
+	// 直接检验exports 是兼顾老版本nodeAPI
 	if (typeof exports !== 'undefined') {
-	  if (typeof module !== 'undefined' && module.exports) {
 
-	  	// 兼容老的require() API
+		// 在正常node环境中
+		// module以及module.exports都存在
+	  	if (typeof module !== 'undefined' && module.exports) {
+
+	  	// exports 原本挂载的是module.exports对象地址，
+	  	// 如果重写module.exports为kit对象则需要顺带
+	  	// 将exports地址指向kit，重写后他们两者会丢失联系
 	    exports = module.exports = kit;
-	  }
+	  	}
 
-	  // 新版的node绑定
-	  exports.kit = kit;
+	// 这句话不是特别重要
+	exports.kit = kit;
 
 	} else {
 		// 把整体绑定在全局变量
-		// 浏览器环境为window.kit
+		// 其实就是global.kit
 	    root.kit = kit;
 	}
 
-	kit.isObject = function(obj) {
-		return kind.call(obj) === "[object Object]";
+	// defined这个方法是用于判断变量是否被定义
+	// 如果还没有定义 Uncaught ReferenceError: * is not defined(…) -> 0
+	// 未定义的变量，建议直接typeof
+	kit.isUndefined = function(variable) {
+		if (typeof variable === "undefined") {
+			return true;
+		}
+		return false;
 	};
 
 	// 类型映射,目前是11种
 	var typeMap = {
+		"isObject":		"[object Object]",
 		"isArray":      "[object Array]",
 		"isBoolean":    "[object Boolean]",
 		"isFunction":   "[object Function]",
@@ -92,7 +105,6 @@
 		"isNull":       "[object Null]",
 		"isRegExp":     "[object RegExp]",
 		"isNumber":     "[object Number]",
-		"isUndefined":  "[object Undefined]",
 		"isError":      "[object Error]"
 	};
 
@@ -203,44 +215,89 @@
 		return total;
 	};
 
-	// 克隆方法
-	kit.clone = function(total, flag) {
+	/*
+		// 对象要求：属性中有对象，且该内部对象有简单类型。
+		var person = {
+			name: "Bob",
+			sing:{
+				"name":"发如雪"
+			}
+		};
 
-		// 深度克隆
-		if (flag === true) {
+		var x =kit.mixin(person);
+		person.sing.name = "";
+		console.log(x);
+	*/
+	// 糅合方法,注意这个方法不能在实例上使用
+	// kit.mixin(true, {a:1}, {b:2}, {c:3}, {d:4});
+	// kit.mixin( [deep ], target, object1 [, objectN ] )...
+	/*
+	    深度复制测试
+		var x = {e:345};
+		var y = kit.mixin(true,{a:1}, {b:2}, {c:3}, x);
+		x.e = 1111;
+		console.log(y.e) // 345
+	*/
+	kit.mixin = function() {
 
-			// 用递归方法拷贝深层次对象
-			var result = (function (cont) {
+		var total,
+			flag,
+			i = 0,
+			length = arguments.length;
 
-				//这里增加了数组处理，暂时还不清楚函数体如何进行复制。
-				var object = (cont instanceof Array) ? [] : {};
 
-				// 注意这里不能用forEach,不然就得不到arguments.callee作用域
-				for (var i in cont) {
-					
-					// 如果是一个引用对象			
-					if (kit.isObject(cont[i]) === true) {
-						object[i] = arguments.callee(cont[i]); 	
-
-					// 如果是一个简单对象，则直接赋值		
-					} else {
-						object[i] = cont[i];		
-					}
-				} 
-				return object;
-			})(total);
-
-		// 浅复制
-		} else {
-
-			//这里增加了数组处理，暂时还不清楚函数体如何进行复制。
-			var result = (total instanceof Array) ? [] : {};
-
-			kit.forEach(total, function(value, key) {
-				result[key] = value;
-			})
+		// 如果第一个是状态码，把total换到arg[1];
+		if (typeof arguments[i] === "boolean") {
+		 	flag = arguments[i];
+		 	i++;
 		}
 
+		//这里增加了数组处理，暂时还不清楚函数体如何进行复制。
+		total = arguments[i];
+		result = (total instanceof Array) ? [] : {};
+
+		// i 当前参数下标
+		// length参数长度
+		for (; i < length; i++) {
+			total = arguments[i];
+
+			// 深度克隆
+			if (flag == true) {
+
+				// 用递归方法拷贝深层次对象
+				var middle = (function (cont) {
+
+					//这里增加了数组处理，暂时还不清楚函数体如何进行复制。
+					var object = (cont instanceof Array) ? [] : {};
+
+					// 注意这里不能用forEach,不然就得不到arguments.callee作用域
+					for (var i in cont) {
+						
+						// 如果是一个引用对象			
+						if (kit.isObject(cont[i]) === true) {
+							object[i] = arguments.callee(cont[i]); 	
+
+						// 如果是一个简单对象，则直接赋值		
+						} else {
+							object[i] = cont[i];		
+						}
+					} 
+					return object;
+				})(total);
+
+				// 得到middle后进行浅复制
+				kit.forEach(total, function(value, key) {
+					result[key] = value;
+				})
+
+			// 浅复制
+			} else {
+
+				kit.forEach(total, function(value, key) {
+					result[key] = value;
+				})
+			}
+		}
 		return result;
 	};
 
@@ -318,7 +375,8 @@
 	kit.clientDown = function(name, type, url) {
 		href = "ifind://!command=down&valuectrl=1&filename=" +
 				name + "." + 
-				type + "&url=http://" + document.location.host + 
+				type + "&url=http://" + 
+				document.location.host + 
 				url; 
 
 		root.location.href = href;
@@ -353,39 +411,66 @@
 			}
 		})
 	*/
-	kit.extend = function(obj) {
+	// kit.extend( [deep ], target, object1 [, objectN ] )...
+	kit.extend = kit.fn.extend = function() {
 
-		// 参考了underscore
-		// 得到排序后的所有方法名数组
-		var sortFuncName = kit.method(obj);
-		kit.forEach(sortFuncName, function(value, key) {
+		var length = arguments.length,
+			i = 1,
+			target = arguments[0] || {},
+			// 参考了underscore
+			// 得到排序后的所有方法名数组
+			sortFuncName = kit.method(target);
 
-			// 1.挂载到对象名下
-			// 2.挂载到原型链上
-			// 3.先保存下当前函数地址(后面用于wrapped)
-			var func = kit[value] = obj[value];
+		// 如果第一个参数是布尔状态,就把对象切到第二个参数
+		if (typeof target === "Boolean") {
+			target = arguments[1] || {};
+			i++;
+		}
 
-			// OOP调用,对方法内部传入参数进行修改
-			// 否则一般写法为 fn[value] = func;
-			fn[value] = function() {
+		// 如果目标对象不是对象或者函数，则返回空对象
+		if (!(kit.isObject(target) === true || kit.isFunction(target) === true)) {
+			target = {};
+		}
 
-				// 第一个参数
-				// 由于这里调用点是kit的实例对象
-				// this是当前的kit实例对象
-				var args = [this._wrapped];
+		if (length === 1) {
+			kit.forEach(sortFuncName, function(value, key) {
 
-				// arguments 为 name 方法需要的其他参数
-				// 用arguments拿参数的好处是不需要制定形参名
-				// 通过apply调用可以一次性传入多个数组
-				// 不管有几个参数，我都可以拿到。
-				// 执行后args组成一个新数组，包含agruments
-				// 把第一个参数改为实例对象
-				push.apply(args, arguments);
+				// 1.挂载到对象名下
+				// 2.挂载到原型链上
+				// 3.先保存下当前函数地址(后面用于wrapped)
+				var func = kit[value] = target[value];
 
-				// 将this指向kit ,传入改造后的参数组
-				return func.apply(kit, args);
-			}
-		});
+				// 如果这个方法是之前绑定在原型上的，
+				// 那么不做覆盖处理,例如kit.fn.extend
+				if (kit.isUndefined(fn[value]) === false) {
+					return ;
+				}
+
+				// OOP调用,对方法内部传入参数进行修改
+				// 否则一般写法为 fn[value] = func;
+				fn[value] = function() {
+
+					// 第一个参数
+					// 由于这里调用点是kit的实例对象
+					// this是当前的kit实例对象
+					var args = [this._wrapped];
+
+					// arguments 为 name 方法需要的其他参数
+					// 用arguments拿参数的好处是不需要制定形参名
+					// 通过apply调用可以一次性传入多个数组
+					// 不管有几个参数，我都可以拿到。
+					// 执行后args组成一个新数组，包含agruments
+					// 把第一个参数改为实例对象
+					push.apply(args, arguments);
+
+					// 将this指向kit ,传入改造后的参数组
+					return func.apply(kit, args);
+				}
+			});
+		} else {
+			// 暂无处理
+		}
+
 	};
 
 	kit.extend(kit);
