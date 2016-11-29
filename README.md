@@ -87,4 +87,8 @@
 	<td>kit.splitSpace</td> 
 	<td>按照空格分割字符串</td>
 </tr>
+<tr>
+	<td>kit.once</td> 
+	<td>执行一次函数包装器</td>
+</tr>
 </table>
