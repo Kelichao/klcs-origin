@@ -312,7 +312,9 @@
 	// 客户端用户id
 	var CLIENT_USERID;
 	kit.CLIENT_USERID = CLIENT_USERID = kit.cookie("userid");
-	kit.CLIENT_VERSION = kit.cookie("")
+
+	// 客户端版本号
+	kit.CLIENT_VERSION = kit.cookie("version") ? kit.cookie("version").split(".").slice(-1)[0] : "";
 
 
 	// i客户端埋点快捷方法
@@ -355,8 +357,8 @@
 					"ld": "client",
 					"client_userid": CLIENT_USERID,
 					"send_time": "" 
-				})
-			})
+				});
+			});
 		}
 	};
 
@@ -377,13 +379,19 @@
 			// 外层循环只要排长度 - 1即可，
 
 		if (typeof argue === "string") {
-			if (argue === "asc") {
-				state = false;
-			} else if (argue === "desc"){
-				state = true;
-			} else {
-				throw "请传入正确的排序方式 'asc'或'desc'";
+
+			// switch用的是严格等
+			switch (argue) {
+				case "asc":
+					state = false;
+					break;
+				case "desc":
+					state = true;
+					break;
+				default:
+					throw "请传入正确的排序方式'asc'或'desc'";
 			}
+
 			arr = arguments[1];
 		} else {
 			arr = argue;
