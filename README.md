@@ -14,6 +14,14 @@
 	<td>通过浅复制，继承当前对象的方法</td>
 </tr>
 <tr>
+	<td>kit.CLIENT_USERID</td> 
+	<td>客户端用户id</td>
+</tr>
+<tr>
+	<td>kit.CLIENT_VERSION</td> 
+	<td>客户端版本号</td>
+</tr>
+<tr>
 	<td>kit.isArray </td> <td>判断是否为数组</td>
 </tr>
 <tr>
