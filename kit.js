@@ -162,7 +162,7 @@
 	// 拆分规律字符串函数
 	// key键值， string输入的串，type分割类型，flag是否除去首个问号字符
 	var strToObject = function(key, string, type ,flag) {
-	    var str = decodeURIComponent(string),
+	    var str = string,
 	        arr = [],
 	        obj = {},
 	        first = null,
@@ -312,6 +312,8 @@
 	// 客户端用户id
 	var CLIENT_USERID;
 	kit.CLIENT_USERID = CLIENT_USERID = kit.cookie("userid");
+	kit.CLIENT_VERSION = kit.cookie("")
+
 
 	// i客户端埋点快捷方法
 	// 调用此方法之前需要引入TA.js
@@ -356,6 +358,67 @@
 				})
 			})
 		}
+	};
+
+	// 冒泡排序法对数组进行排序
+	// 第一个参数如果是"asc"则是正序从小到大(默认)
+	// 如果是"desc",则倒叙，从大到小
+	//arr = [85, 24, 63, 45, 17, 31, 96, 50];
+	kit.sort = function() {
+		// 冒泡排序法
+
+		var temp,
+			flag = false,// 是否交换过
+			state = false,// 是否需要倒序
+			argue = arguments[0],
+			arr,
+			length;// 7
+			// 因为排序次数只要比数组长度少一次
+			// 外层循环只要排长度 - 1即可，
+
+		if (typeof argue === "string") {
+			if (argue === "asc") {
+				state = false;
+			} else if (argue === "desc"){
+				state = true;
+			} else {
+				throw "请传入正确的排序方式 'asc'或'desc'";
+			}
+			arr = arguments[1];
+		} else {
+			arr = argue;
+		}
+
+		length = arr.length - 1;
+
+		// 每一次排序都会在数组的顶部出现一个符合要求的数组成员
+		for (var i = 0; i < length ; i++) {
+			
+			// 内层循环
+			// 最上面的元素可以通过i除去排序
+			// 也就是说已经排好的不需要再排了
+			for(var j = 0; j < length - i; j++) {
+				if (arr[j] > arr[j + 1]) {
+					temp = arr[j + 1];
+					arr[j + 1] = arr[j];
+					arr[j] = temp;
+
+					// 如果该论循环已经发生了交换
+					flag = true;
+				}
+			}
+
+			// 如果当前排序已经没有变化，则直接退出循环
+			if(flag === false) {
+				break;
+			}
+		}
+
+		if(state === true) {
+			arr = arr.reverse();
+		}
+
+		return arr;
 	};
 
 	// 内部对挂载的方法按名称进行排序
