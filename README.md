@@ -1,5 +1,5 @@
 
-## 今天开始正式用issue 写博客2016/10/18
+## 开始用issue 写博客2016/10/18
 
 ### kit.js [(链接地址)](https://github.com/Kelichao/kit.js/blob/master/kit.js)
 
