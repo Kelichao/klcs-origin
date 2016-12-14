@@ -108,4 +108,8 @@
 	<td>kit.sort</td> 
 	<td>第一个参数如果是"asc"则是正序从小到大(默认), 如果是"desc",则倒叙，如果只传一个数组参数则进行正序排序</td>
 </tr>
+<tr>
+	<td>kit.route</td> 
+	<td>使用方法为传入一个函数参数，路由发生变化时就触发回调kit.route(fucntion(hash){console.log(hash)})。回调的第一个参数即hash值。注：hash值会改变浏览器历史记录</td>
+</tr>
 </table>
