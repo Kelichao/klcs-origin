@@ -440,8 +440,19 @@
 		});
 
 		return names.sort();
-	}
-
+	};
+	
+	// 监听路由变化
+	kit.route = function(fn) {
+		
+		// 如果参数是函数，则进行绑定
+		if(kit.isFunction(fn) === true) {
+			root.onhashchange = function() {
+				fn(root.location.hash);
+			}
+		}
+	};
+	
 	// 调用客户端下载框
 	kit.clientDown = function(name, type, url) {
 		href = "ifind://!command=down&valuectrl=1&filename=" +
@@ -451,7 +462,7 @@
 				url; 
 
 		root.location.href = href;
-	}
+	};
 
 	// 拆分一个字符串中间有间隔的字符串
 	// 如："aaa    bbb cc    ddd"
