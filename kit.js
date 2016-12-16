@@ -448,7 +448,7 @@
 		// 如果参数是函数，则进行绑定
 		if(kit.isFunction(fn) === true) {
 			root.onhashchange = function() {
-				fn(root.location.hash);
+				fn(root.location.hash.substring(1));
 			}
 		}
 	};
