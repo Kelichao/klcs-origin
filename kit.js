@@ -362,6 +362,16 @@
 		}
 	};
 
+	// 得到想要的日期
+	kit.finallyDate = function() {
+
+	};
+
+	// 判断对象是否有某个属性
+	kit.paramType = function() {
+
+	};
+
 	// 冒泡排序法对数组进行排序
 	// 第一个参数如果是"asc"则是正序从小到大(默认)
 	// 如果是"desc",则倒叙，从大到小
@@ -455,7 +465,7 @@
 	
 	// 调用客户端下载框
 	kit.clientDown = function(name, type, url) {
-		href = "ifind://!command=down&valuectrl=1&filename=" +
+		var href = "ifind://!command=down&valuectrl=1&filename=" +
 				name + "." + 
 				type + "&url=http://" + 
 				document.location.host + 
