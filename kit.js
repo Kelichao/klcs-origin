@@ -110,8 +110,9 @@
 
 	// 内部生成对象判断函数
 	var creatrTypeFunction = function(object) {
-
-		for(item in object) {
+		
+		// 这里没有加var导致在ie中报错
+		for(var item in object) {
 
 			// 将方法挂载到对象上,每个item一个闭包空间来去除闭包影响
 			// underscore用forEach生产，原理跟这个一样,后期可以调整
@@ -361,6 +362,20 @@
 			});
 		}
 	};
+	// get/set 函数
+
+	//  看看能否建立一个订阅模式的函数
+
+	// 是否满足请求返回格式的状态函数
+
+	// 是否有disabled状态的函数
+
+	// 写一个新闻滚动栏组件
+
+	// 集体绑定事件document
+	kit.eventCenter = function() {
+
+	};
 
 	// 得到想要的日期
 	kit.finallyDate = function() {
@@ -369,8 +384,29 @@
 
 	// 判断对象是否有某个属性
 	kit.paramType = function() {
+		// setTimeout(fn,0)// 可以排到队列的最后面，可以防止与route的改变冲突
+	};
+
+	// 启用underscore 启用Mustache.js类型模板
+	kit.underToMustache = function() {
+		// 设置Mustache.js类型的模板语法
+		// 这句话需要写在_.template()方法之前
+		_.templateSettings = {
+		  interpolate: /\{\{=([\s\S]+?)\}\}/g,
+		  evaluate: /\{\{([\s\S]+?)\}\}/g,
+		  escape: /\{\{-([\s\S]+?)\}\}/g
+		};
+	};
+
+	// 客户端跳转命令
+	kit.clientCmd = function() {
 
 	};
+
+	// // 通过undescore模板渲染页面
+	// kit.underRender = function() {
+
+	// };
 
 	// 冒泡排序法对数组进行排序
 	// 第一个参数如果是"asc"则是正序从小到大(默认)
@@ -453,12 +489,23 @@
 	};
 	
 	// 监听路由变化
-	kit.route = function(fn) {
-		
+	kit.route = function(fn, array) {
+
 		// 如果参数是函数，则进行绑定
 		if(kit.isFunction(fn) === true) {
 			root.onhashchange = function() {
-				fn(root.location.hash.substring(1));
+
+				var flag = true;
+
+				if (1) {
+
+				}
+
+				// 如果第二个参数是数组
+				if (kit.isArray(array) && array.length > 0) {
+					fn(root.location.hash.substring(1));
+				}
+				
 			}
 		}
 	};
@@ -553,6 +600,7 @@
 					// 不管有几个参数，我都可以拿到。
 					// 执行后args组成一个新数组，包含agruments
 					// 把第一个参数改为实例对象
+					// 这个push方式相比传统的push，可以一次性传入多个数组值
 					push.apply(args, arguments);
 
 					// 将this指向kit ,传入改造后的参数组
