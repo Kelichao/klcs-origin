@@ -153,7 +153,12 @@
 
 		}
 		
-		totalStr = str.replace(/^\s+|((?:^|[^\\\\])(?:\\\\.)*)\s+$/g, "$1");
+		if (kit.isString(str) === true) {
+			totalStr = str.replace(/^\s+|((?:^|[^\\\\])(?:\\\\.)*)\s+$/g, "$1");
+		} else {
+			throw Error("需要解析的并不是字符串");
+		}
+
 		// 失败：如果末尾有两个以上的空格就读取失败了
 		// str.replace(/^\s+((\S|\s)*)\s+$/g, "$1");
 		// jq写法   str.replace(/^\s+|((?:^|[^\\\\])(?:\\\\.)*)\s+$/g, "$1");
@@ -374,7 +379,8 @@
 
 	// 集体绑定事件document
 	kit.eventCenter = function() {
-
+		// fn["aaa"]到时候用函数取得，"click"放在最后一位，默认没有就是click，有具体的就填写别的事件名
+		// 不要出现[".aaa", "click", fn["aaa"]]
 	};
 
 	// 得到想要的日期
@@ -512,6 +518,7 @@
 	
 	// 调用客户端下载框
 	kit.clientDown = function(name, type, url) {
+		// 注意这里一定要传type,不然导致整个页面链接改变
 		var href = "ifind://!command=down&valuectrl=1&filename=" +
 				name + "." + 
 				type + "&url=http://" + 
