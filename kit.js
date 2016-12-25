@@ -212,11 +212,18 @@
 	};
 
 	// cookie对象获取函数
-	kit.cookie = function(key,cookie) {
+	// aaa=123;bbb=456;ccc=678
+	kit.cookie = function(key,string) {
 
-		cookie = cookie || root.document.cookie;
-		var total = strToObject(key, cookie, ";", false);
-		    
+		var cookie = string || root.document.cookie,
+			total = "";
+		
+		// 如果传入的字符串结尾带了分号(;)，则进行删除    
+		if (cookie.slice(-1) === ";") {
+			cookie = cookie.slice(0, -1);
+		}
+
+		total = strToObject(key, cookie, ";", false);
 		// 测试用例kit.cookie("bbb","aaa=123;bbb=789");
 		return total;
 	};
@@ -367,6 +374,11 @@
 			});
 		}
 	};
+
+	// 我需要一套标准的模式，比如总参数，总配置，分段参数等
+
+	// 提取html标签里面内容的正则方法
+
 	// get/set 函数
 
 	//  看看能否建立一个订阅模式的函数
