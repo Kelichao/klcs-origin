@@ -65,7 +65,7 @@
 </tr>
 <tr>
 	<td>kit.cookie</td> 
-	<td>第一个参数为需要取得的键值，第二个为需要解析成对象的地址串，如果不传为document.cookie</td>
+	<td>第一个参数为需要取得的键值（如果传入的是"" 或者null，则会打出整个键值对对象），第二个为需要解析成对象的地址串，如果不传为document.cookie，已经把末尾的分号“;”去除</td>
 </tr>
 <tr>
 	<td>kit.clone</td> 
