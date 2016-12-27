@@ -5,7 +5,8 @@
  * @https://github.com/Kelichao/kit.js
 */
 
-;(function() {
+// 防止undefined被改写
+;(function(undefined) {
 
 	// root 的值, 客户端为window, 服务端(node) 中为 exports
 	var root = this;
@@ -247,14 +248,17 @@
 	/*
 	    深度复制测试
 		var x = {e:345};
-		var y = kit.mixin(true,{a:1}, {b:2}, {c:3}, x);
+		var b = {a:1};
+		kit.mixin(true,b, {b:2}, {c:3}, x);
 		x.e = 1111;
-		console.log(y.e) // 345
+		console.log(b.e) // 345
+		// b = {a: 1, b: 2, c: 3, e: 345}
 	*/
 	kit.mixin = function() {
 
 		var total,
 			flag,
+			result,
 			i = 0,
 			length = arguments.length;
 
@@ -266,8 +270,8 @@
 		}
 
 		//这里增加了数组处理，暂时还不清楚函数体如何进行复制。
-		total = arguments[i];
-		result = (total instanceof Array) ? [] : {};
+		// total = arguments[i];
+		result = arguments[i];
 
 		// i 当前参数下标
 		// length参数长度
@@ -351,15 +355,20 @@
 		if (kit.isObject(param)) {
 			if (typeof $ === "function") {
 				kit.forEach(param, function(value, key) {
-					$(document).on("mousedown", value, function() {
-						// 触发埋点方式
-						TA.log({
-							"id": key,
-							"ld": "client",
-							"client_userid": CLIENT_USERID,
-							"send_time": "" 
-						})
-					})
+
+					// 优化了dom对象是空数组或者是""的时候事件委托会在document触发
+					if (value !== "" && value !== []) {
+						$(document).on("mousedown", value, function() {
+							// 触发埋点方式
+							TA.log({
+								"id": key,
+								"ld": "client",
+								"client_userid": CLIENT_USERID,
+								"send_time": "" 
+							});
+						});
+					}
+
 				});
 			}
 		} else if (kit.isArray(param)) {
@@ -376,16 +385,35 @@
 	};
 
 	// 我需要一套标准的模式，比如总参数，总配置，分段参数等
+    // 如new一个opts = new kie.Model({a:1,b:2});
+	kit.DataModel = function(object) {
+		if (this instanceof kit.DataModel) {
+			this._options = object;
+		} else {
+			return new kit.DataModel(object);
+		}
+	};
+
+	// 只有数据模型才具有的set,get方法
+	kit.DataModel.prototype.get = function(key) {
+		return this._options[key];
+	};
+
+	kit.DataModel.prototype.set = function(value) {
+		var temporary = kit.mixin(this._options, value);
+		return temporary;
+	}
+	// 埋点那个考虑下切换这种情况
 
 	// 提取html标签里面内容的正则方法
 
-	// get/set 函数
-
 	//  看看能否建立一个订阅模式的函数
 
-	// 是否满足请求返回格式的状态函数
+	// 是否满足请求返回格式的状态函数记得补0
 
-	// 是否有disabled状态的函数
+	// 是否有disabled状态的函数无法点击
+
+	// 客户端跳转OnClientCmd接口，动态引入api.js
 
 	// 写一个新闻滚动栏组件
 
