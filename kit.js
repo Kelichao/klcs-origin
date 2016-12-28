@@ -125,7 +125,7 @@
 			})(item);
 		}
 	};
- 
+
 	creatrTypeFunction(typeMap);
 
 	// forEach负责用来遍历对象/数组属性
@@ -436,6 +436,8 @@
 		var temporary = kit.mixin(this._options, value);
 		return temporary;
 	}
+
+		// 写一个新闻滚动栏组件
 	// 埋点那个考虑下切换这种情况
 
 	// 提取html标签里面内容的正则方法
@@ -447,8 +449,17 @@
 	// 是否有disabled状态的函数无法点击
 
 	// 客户端跳转OnClientCmd接口，动态引入api.js
-
-	// 写一个新闻滚动栏组件
+	// 在65上加载貌似是55ms还是比较快的
+	kit.clientCmd = function(toClient) {
+		if (root.API === undefined) {
+			kit.addScript("/thsft/js/api/api.js",function() {
+				root.API.OnClientCmd(toClient);
+			});
+			return;
+		} else {
+			root.API.OnClientCmd(toClient);
+		}
+	};
 
 	// 集体绑定事件document
 	kit.eventCenter = function() {
