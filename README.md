@@ -5,8 +5,16 @@
 
 ### 方法:借鉴底线库的工具框架，包含一些常用方法，在兼容AMD模式的同时，兼顾了CMD，在seaJS中也能够正常包装
 <table>
+
+<thead>
 <tr>
-	<td >kit.method(obj)                              </td> 
+	<td>XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX方法名称XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</td>
+	<td>使用方法</td>
+</tr>
+</thead>
+<tbody>
+<tr>
+	<td >kit.method(obj)</td> 
 	<td>为对象上挂载的函数体排序生成数组名，除去变量值,返回一个新数组</td>
 </tr>
 <tr>
@@ -122,4 +130,5 @@
 	<td>动态加载脚本，兼顾了IE 6-8浏览器，第一个参数是地址，第二个参数可选，
 	为脚本加载完毕后触发的回调</td>
 </tr>
+</tbody>
 </table>
