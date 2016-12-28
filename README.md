@@ -61,12 +61,14 @@
 </tr>
 <tr>
 	<td>kit.locaSearch(key[, string])</td> 
-	<td>例子："?getdate=2016-12-08&type=2"。第一个参数为需要取得的键值，第二个为需要解析成对象的地址串，
+	<td>例子："?getdate=2016-12-08&type=2"。第一个参数为需要取得的键值，
+	第二个为需要解析成对象的地址串，
 	如果不传为location.search</td>
 </tr>
 <tr>
 	<td>kit.cookie(key[, string])</td> 
-	<td>例子："aaa=123;bbb=456;ccc=678"。第一个参数为需要取得的键值（如果传入的是"" 或者null，则会打出整个键值对对象），
+	<td>例子："aaa=123;bbb=456;ccc=678"。第一个参数为需要取得的键值
+	（如果传入的是"" 或者null，则会打出整个键值对对象），
 	第二个为需要解析成对象的地址串，如果不传为document.cookie，已经把末尾的分号“;”去除</td>
 </tr>
 <tr>
@@ -83,7 +85,8 @@
 </tr>
 <tr>
 	<td>kit.ta(value[, type])</td> 
-	<td>埋点快捷方式，传入对象{"ibyf130_3242": ".class1","iby2345_fre4": ".class2"} 进行dom绑定，
+	<td>埋点快捷方式，
+	传入对象{"ibyf130_3242": ".class1","iby2345_fre4": ".class2"} 进行dom绑定，
 	如果传入数组，则是载入页面调用。如果有第二个参数,则可以自行设定触发方式</td>
 </tr>
 <tr>
@@ -105,15 +108,18 @@
 </tr>
 <tr>
 	<td>kit.sort("asc"/"desc")</td> 
-	<td>第一个参数如果是"asc"则是正序从小到大(默认), 如果是"desc",则倒叙，如果只传一个数组参数则进行正序排序</td>
+	<td>第一个参数如果是"asc"则是正序从小到大(默认), 如果是"desc",则倒叙，
+	如果只传一个数组参数则进行正序排序</td>
 </tr>
 <tr>
 	<td>kit.route(callback)</td> 
-	<td>使用方法为传入一个函数参数，路由发生变化时就触发回调kit.route(fucntion(hash){console.log(hash)})。
+	<td>使用方法为传入一个函数参数，路由发生变化时就触发回调
+	kit.route(fucntion(hash){console.log(hash)})。
 	回调的第一个参数即hash值。注：hash值会改变浏览器历史记录</td>
 </tr>
 <tr>
 	<td>kit.addScript(url[, callback])</td> 
-	<td>动态加载脚本，兼顾了IE 6-8浏览器，第一个参数是地址，第二个参数可选，为脚本加载完毕后触发的回调</td>
+	<td>动态加载脚本，兼顾了IE 6-8浏览器，第一个参数是地址，第二个参数可选，
+	为脚本加载完毕后触发的回调</td>
 </tr>
 </table>
