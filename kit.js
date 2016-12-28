@@ -125,7 +125,7 @@
 			})(item);
 		}
 	};
-
+ 
 	creatrTypeFunction(typeMap);
 
 	// forEach负责用来遍历对象/数组属性
