@@ -2,8 +2,9 @@
  * @description: 较为常用的工具集合
  * @author: kelichao
  * @update: 2016-11-19
+ * @update: 2016-12-28 / 增加了埋点文件以及调用客户端接口文件的方法
  * @https://github.com/Kelichao/kit.js
-*/
+ */
 
 // 防止undefined被改写
 ;(function(undefined) {
@@ -347,41 +348,73 @@
 	// 网页加载后直接触发
 	kit.ta = function(param) {
 
+		// 内部实现ta的方法
+		function _ta(param) {
+			if (kit.isObject(param)) {
+				if (typeof $ === "function") {
+					kit.forEach(param, function(value, key) {
+
+						// 优化了dom对象是空数组或者是""的时候事件委托会在document触发
+						if (value !== "" && value !== []) {
+							$(document).on("mousedown", value, function() {
+								// 触发埋点方式
+								TA.log({"id": key,"ld": "client","client_userid": CLIENT_USERID,"send_time": ""});
+							});
+						}
+
+					});
+				}
+			} else if (kit.isArray(param)) {
+				kit.forEach(param, function(value, key) {
+					// 触发埋点方式
+					TA.log({"id": value,"ld": "client","client_userid": CLIENT_USERID,"send_time": ""});
+				});
+			}
+		}
+
+		// 如果没有该脚本
 		if (typeof TA === "undefined") {
-			console.warn("未引入TA.js");
+			console.warn("未引入TA.js,正在动态加载标签");
+			kit.addScript("/thsft/js/ta.min.js",function() {
+				_ta(param);
+			});
 			return;
 		}
 
-		if (kit.isObject(param)) {
-			if (typeof $ === "function") {
-				kit.forEach(param, function(value, key) {
+		_ta(param);
+	};
+	// 动态创建dom元素
+	kit.addScript = function(url, callback) {
+		// 创建dom元素
+		var script = document.createElement("script");
 
-					// 优化了dom对象是空数组或者是""的时候事件委托会在document触发
-					if (value !== "" && value !== []) {
-						$(document).on("mousedown", value, function() {
-							// 触发埋点方式
-							TA.log({
-								"id": key,
-								"ld": "client",
-								"client_userid": CLIENT_USERID,
-								"send_time": "" 
-							});
-						});
-					}
+		// 设置属性
+		script.type = "text/javascript";
+		script.src = url;
 
-				});
+		// 此处参考seaJS中加载代码时所用的
+		// ie8中这个就是false ，chrome中为true
+		var supportOnload = "onload" in script;
+
+		if (supportOnload) {
+			script.onload = function() {
+
+				// success code
+				callback();
+			};
+		} else {
+			script.onreadystatechange = function() {
+
+				// IE8中这两个属性值会有两个阶段  1.loading   2.loaded 某些情况下是complete
+				if(script.readyState === "loaded"|| script.readyState === 'complete') {
+
+					// success code
+					callback();
+				}
 			}
-		} else if (kit.isArray(param)) {
-			kit.forEach(param, function(value, key) {
-				// 触发埋点方式
-				TA.log({
-					"id": value,
-					"ld": "client",
-					"client_userid": CLIENT_USERID,
-					"send_time": "" 
-				});
-			});
 		}
+
+		document.body.appendChild(script);
 	};
 
 	// 我需要一套标准的模式，比如总参数，总配置，分段参数等
