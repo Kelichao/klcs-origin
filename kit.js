@@ -346,8 +346,9 @@
 	*/
 	// 数组方式["ibyf130_3242","iby2345_fre4"]
 	// 网页加载后直接触发
-	kit.ta = function(param) {
+	kit.ta = function(param, type) {
 
+		var type = type || "mousedown";
 		// 内部实现ta的方法
 		function _ta(param) {
 			if (kit.isObject(param)) {
@@ -356,7 +357,7 @@
 
 						// 优化了dom对象是空数组或者是""的时候事件委托会在document触发
 						if (value !== "" && value !== []) {
-							$(document).on("mousedown", value, function() {
+							$(document).on(type, value, function() {
 								// 触发埋点方式
 								TA.log({"id": key,"ld": "client","client_userid": CLIENT_USERID,"send_time": ""});
 							});
@@ -437,7 +438,7 @@
 		return temporary;
 	}
 
-		// 写一个新闻滚动栏组件
+	// 写一个新闻滚动栏组件
 	// 埋点那个考虑下切换这种情况
 
 	// 提取html标签里面内容的正则方法
