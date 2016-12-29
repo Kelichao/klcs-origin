@@ -12,8 +12,10 @@
 	// root 的值, 客户端为window, 服务端(node) 中为 exports
 	var root = this;
 
-	// 判断对象类型
-	var kind = Object.prototype.toString;
+
+	var host = document.location.host,
+		// 判断对象类型
+		kind = Object.prototype.toString;
 
 	// 方法简写
 	// 缓存变量, 便于压缩代码
@@ -111,7 +113,7 @@
 	};
 
 	// 内部生成对象判断函数
-	var creatrTypeFunction = function(object) {
+	var _creatrTypeFunction = function(object) {
 		
 		// 这里没有加var导致在ie中报错
 		for(var item in object) {
@@ -126,7 +128,7 @@
 		}
 	};
 
-	creatrTypeFunction(typeMap);
+	_creatrTypeFunction(typeMap);
 
 	// forEach负责用来遍历对象/数组属性
 	kit.each = kit.forEach = function(total, fn, context) {
@@ -170,7 +172,7 @@
 
 	// 拆分规律字符串函数
 	// key键值， string输入的串，type分割类型，flag是否除去首个问号字符
-	var strToObject = function(key, string, type ,flag) {
+	_strToObject = function(key, string, type ,flag) {
 	    var str = string,
 	        arr = [],
 	        obj = {},
@@ -208,7 +210,7 @@
 	kit.locaSearch = function(key, address){
 
 		address = address || root.location.search;
-		var total = strToObject(key, address, "&", true);
+		var total = _strToObject(key, address, "&", true);
 	    
 	    // 测试用例kit.locaSearch("fsd","?sfsd=3423&we=234&fsd=324");
 	    return total;
@@ -226,7 +228,7 @@
 			cookie = cookie.slice(0, -1);
 		}
 
-		total = strToObject(key, cookie, ";", false);
+		total = _strToObject(key, cookie, ";", false);
 		// 测试用例kit.cookie("bbb","aaa=123;bbb=789");
 		return total;
 	};
@@ -377,6 +379,7 @@
 		// 如果没有该脚本
 		if (typeof TA === "undefined") {
 			console.warn("未引入TA.js,正在动态加载标签");
+			// 这个地址是固定的
 			kit.addScript("/thsft/js/ta.min.js",function() {
 				_ta(param);
 			});
@@ -449,6 +452,7 @@
 	// 是否满足请求返回格式的状态函数记得补0
 
 	// 是否有disabled状态的函数无法点击
+
 
 	// 客户端跳转OnClientCmd接口，动态引入api.js
 	// 在65上加载貌似是55ms还是比较快的
@@ -601,16 +605,20 @@
 			}
 		}
 	};
-	
-	// 调用客户端下载框
-	kit.clientDown = function(name, type, url) {
-		// 注意这里一定要传type,不然导致整个页面链接改变
-		var href = "ifind://!command=down&valuectrl=1&filename=" +
-				name + "." + 
-				type + "&url=http://" + 
-				document.location.host + 
-				url; 
 
+	// 调用客户端下载框 kit.clientDown("abc", "/thsft/Istrategy/abc.pdf", ".xls");
+	// type可选，如果url能够取到地址串，则不会被type覆盖，
+	// 如果地址串后面的url没有解析出类型，则会被type覆盖
+	kit.clientDown = function(name, url, type) {
+		
+		// replace不适合截取
+		var typeArray = url.match(/\.(\w{2,4})?$/g);
+		var type = typeArray ? typeArray[0] : null || type;
+
+		// 注意这里一定要有type,不然导致整个页面链接改变
+		var href = "ifind://!command=down&valuectrl=1&filename=" + name + type + 
+				   "&url=http://" + host + url;
+		debugger
 		root.location.href = href;
 	};
 
