@@ -131,5 +131,9 @@
 	<td>动态加载脚本，兼顾了IE 6-8浏览器，第一个参数是地址，第二个参数可选，
 	为脚本加载完毕后触发的回调</td>
 </tr>
+<tr>
+	<td>kit.underToMustache()</td> 
+	<td>启用Mustache.js类型模板语法，使用{{= }} 这样的语法</td>
+</tr>
 </tbody>
 </table>
