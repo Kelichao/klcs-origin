@@ -156,7 +156,8 @@
 		}
 		
 		if (kit.isString(str) === true) {
-			totalStr = str.replace(/^\s+|((?:^|[^\\\\])(?:\\\\.)*)\s+$/g, "$1");
+			// 成功kit.trim("  fsdf f     ");
+			totalStr = str.replace(/((^\s*)|(\s*$))/g, "");
 		} else {
 			throw Error("需要解析的并不是字符串");
 		}
