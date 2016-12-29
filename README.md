@@ -98,8 +98,9 @@
 	如果传入数组，则是载入页面调用。如果有第二个参数,则可以自行设定触发方式</td>
 </tr>
 <tr>
-	<td>kit.clientDown(name, type, url)</td> 
-	<td>快速调用客户端下载弹窗1：下载文件取名，2：文件类型，3：文件下载地址(相对路径)</td>
+	<td>kit.clientDown(name, url[, type])</td> 
+	<td>快速调用客户端下载弹窗1：下载文件取名，2：文件下载地址(相对路径)，3：文件类型。	type可选，如果url能够取到地址串，则不会被type覆盖，
+	 如果地址串后面的url没有解析出类型，则会被type覆盖</td>
 </tr>
 <tr>
 	<td>kit.splitSpace(string)</td> 
