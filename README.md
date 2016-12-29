@@ -99,8 +99,8 @@
 </tr>
 <tr>
 	<td>kit.clientDown(name, url[, type])</td> 
-	<td>快速调用客户端下载弹窗1：下载文件取名，2：文件下载地址(相对路径)，3：文件类型。	type可选，如果url能够取到地址串，则不会被type覆盖，
-	 如果地址串后面的url没有解析出类型，则会被type覆盖</td>
+	<td>快速调用客户端下载弹窗1：下载文件取名，2：文件下载地址(相对路径)，3：文件类型,需要加（.）。	type可选，如果url能够取到地址串，则不会被type覆盖，
+	 如果地址串后面的url没有解析出类型，则会被type覆盖。例子： kit.clientDown("abc", "/thsft/Istrategy/abc.pdf", ".xls")</td>
 </tr>
 <tr>
 	<td>kit.splitSpace(string)</td> 
