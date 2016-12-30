@@ -139,11 +139,34 @@
 			}
 		} else if (kit.isArray(total)) {
 			var i = 0;
-			for (; i<total.length ;i++) {
+			for (; i < total.length; i++) {
 				fn(total[i], i);
 			}
 		}
 	};
+
+	// some如果有一项返回false则返回false
+	kit.some = function(total, fn) {
+		var flag = "";
+		if (kit.isObject(total)) {
+			for (var i in total) {
+				flag = fn(total[i], i);
+				if (flag === false) {
+					return false;
+				}
+			}
+		} else if (kit.isArray(total)) {
+			for (var i=0; i < total.length; i++) {
+				flag = fn(total[i], i);
+				if (flag === false) {
+					return false;
+				}
+			}
+		}
+
+		// 没有返回false的项目
+		return true;
+	}
 
 	// 去除字符串两边的空格
 	// 如果有第二个参数，则把所有空格删除
@@ -250,13 +273,16 @@
 	// kit.mixin(true, {a:1}, {b:2}, {c:3}, {d:4});
 	// kit.mixin( [deep ], target, object1 [, objectN ] )...
 	/*
-	    深度复制测试
-		var x = {e:345};
+	    // 深度复制测试
+		var x = {
+			e:{
+				f:100
+			}
+		};
 		var b = {a:1};
-		kit.mixin(true,b, {b:2}, {c:3}, x);
-		x.e = 1111;
-		console.log(b.e) // 345
-		// b = {a: 1, b: 2, c: 3, e: 345}
+		kit.mixin(true,b, {d:22}, {c:33}, x);
+		x.e.f = 1111;
+		console.log(b) // 345
 	*/
 	kit.mixin = function() {
 
@@ -264,6 +290,7 @@
 			flag,
 			result,
 			i = 0,
+			temporary = {},
 			length = arguments.length;
 
 
@@ -273,20 +300,22 @@
 		 	i++;
 		}
 
-		//这里增加了数组处理，暂时还不清楚函数体如何进行复制。
+		// 这里增加了数组处理，暂时还不清楚函数体如何进行复制。
 		// total = arguments[i];
 		result = arguments[i];
 
 		// i 当前参数下标
 		// length参数长度
 		for (; i < length; i++) {
+
+			// 当前被拷贝的对象
 			total = arguments[i];
 
 			// 深度克隆
 			if (flag == true) {
 
-				// 用递归方法拷贝深层次对象
-				var middle = (function (cont) {
+				// 用递归方法拷贝深层次对象,得到全新对象
+				temporary = (function (cont) {
 
 					//这里增加了数组处理，暂时还不清楚函数体如何进行复制。
 					var object = (cont instanceof Array) ? [] : {};
@@ -306,8 +335,8 @@
 					return object;
 				})(total);
 
-				// 得到middle后进行浅复制
-				kit.forEach(total, function(value, key) {
+				// 得到temporary后进行浅复制
+				kit.forEach(temporary, function(value, key) {
 					result[key] = value;
 				})
 
@@ -388,6 +417,7 @@
 
 		_ta(param);
 	};
+
 	// 动态创建dom元素
 	kit.addScript = function(url, callback) {
 		// 创建dom元素
@@ -422,26 +452,57 @@
 		document.body.appendChild(script);
 	};
 
-	// 我需要一套标准的模式，比如总参数，总配置，分段参数等
-    // 如new一个opts = new kie.Model({a:1,b:2});
-	kit.DataModel = function(object) {
-		if (this instanceof kit.DataModel) {
-			this._options = object;
+	// 数据模型，比如总参数，总配置，分段参数等
+    // 如new一个opts = new kie.Model({a:1,b:2}, function(){alert(1)});
+	kit.Model = function(total, changeFunction) {
+		if (this instanceof kit.Model) {
+			this._options = total;
+			this._changeFunction = changeFunction;
 		} else {
-			return new kit.DataModel(object);
+			return new kit.Model(total);
 		}
 	};
 
 	// 只有数据模型才具有的set,get方法
-	kit.DataModel.prototype.get = function(key) {
+	kit.Model.prototype.get = function(key) {
 		return this._options[key];
 	};
 
-	kit.DataModel.prototype.set = function(value) {
-		var temporary = kit.mixin(this._options, value);
-		return temporary;
-	}
+	// 设置模型的值
+	kit.Model.prototype.set = function(value) {
 
+		var temporary = this._options;
+		var final = kit.mixin(true, this._options, value);
+
+		this.change(final);
+		return final;
+	};
+
+
+	kit.Model.prototype.change = function(final) {
+		this._changeFunction(final);
+	};
+
+	// 通过视图绑定页面事件
+	// kit.View({
+	// 	current:document,
+	// 	events:{
+	// 		".aaa": "fn1 click",
+	// 		".bbb": "fn2 change"
+	// 	}
+	// });
+	kit.View = function(total) {
+
+		if (this instanceof kit.View) {
+
+			// 事件代理总对象
+			this.current = total.current || document;
+			this.arr = total.events;
+		} else {
+			return new kit.View(total);
+		}
+	};
+	// 发布订阅callback
 	// 写一个新闻滚动栏组件
 	// 埋点那个考虑下切换这种情况
 
@@ -610,7 +671,7 @@
 	// type可选，如果url能够取到地址串，则不会被type覆盖，
 	// 如果地址串后面的url没有解析出类型，则会被type覆盖
 	kit.clientDown = function(name, url, type) {
-		
+
 		// replace不适合截取
 		var typeArray = url.match(/\.(\w{2,4})?$/g);
 		var type = typeArray ? typeArray[0] : null || type;
@@ -618,7 +679,7 @@
 		// 注意这里一定要有type,不然导致整个页面链接改变
 		var href = "ifind://!command=down&valuectrl=1&filename=" + name + type + 
 				   "&url=http://" + host + url;
-		debugger
+
 		root.location.href = href;
 	};
 
