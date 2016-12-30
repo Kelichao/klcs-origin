@@ -60,6 +60,10 @@
 	<td>kit.isError(totle)</td> <td>判断是否是Error</td>
 </tr>
 <tr>
+	<td>kit.some(object/array, fn)</td>
+	 <td>迭代方法，如果有一个回调函数返回false，则返回fanse</td>
+</tr>
+<tr>
 	<td>kit.forEach(object/array, fn)/kit.each(object/array, fn)</td>
 	 <td>负责用来遍历对象/数组属性,按照ES5标准，与jq参数位置不同</td>
 </tr>
