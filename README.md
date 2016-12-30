@@ -139,5 +139,9 @@
 	<td>kit.underToMustache()</td> 
 	<td>启用Mustache.js类型模板语法，使用{{= }} 这样的语法</td>
 </tr>
+<tr>
+	<td>kit.bind(total, fn)</td> 
+	<td>返回一个绑定this后的函数体</td>
+</tr>
 </tbody>
 </table>
