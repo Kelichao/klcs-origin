@@ -144,5 +144,9 @@
 	<td>kit.bind(total, fn)</td> 
 	<td>返回一个绑定this后的函数体</td>
 </tr>
+<tr>
+	<td>kit.error(fn)</td> 
+	<td>window.onerror触发之后的执行函数</td>
+</tr>
 </tbody>
 </table>
