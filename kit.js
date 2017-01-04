@@ -168,6 +168,12 @@
 		return true;
 	}
 
+	// 拆分一个字符串中间有间隔的字符串
+	// 如："aaa    bbb cc    ddd"
+	kit.splitSpace = function(str) {
+		return str.split(/\s+/g);
+	};
+
 	// 去除字符串两边的空格
 	// 如果有第二个参数，则把所有空格删除
 	// kit.trim("  dsfdsa=- 234.;df  ");
@@ -195,7 +201,7 @@
 
 	// 拆分规律字符串函数
 	// key键值， string输入的串，type分割类型，flag是否除去首个问号字符
-	_strToObject = function(key, string, type ,flag) {
+	var _strToObject = function(key, string, type ,flag) {
 	    var str = string,
 	        arr = [],
 	        obj = {},
@@ -282,8 +288,36 @@
 		var b = {a:1};
 		kit.mixin(true,b, {d:22}, {c:33}, x);
 		x.e.f = 1111;
-		console.log(b) // 345
+		console.log(b.e.f) // 打出100说明复制正确
 	*/
+
+	// 用递归方法拷贝深层次对象,得到全新对象
+	var _recursive = function(cont, res) {
+
+		//这里增加了数组处理，暂时还不清楚函数体如何进行复制。
+		var arg = arguments.callee,
+			object = (cont instanceof Array) ? [] : {};
+
+		// 继承原先的对象键值对
+		kit.forEach(res, function(value, key) {
+			object[key] = res[key];
+		});
+
+		// 遍历中间值的键值对
+		kit.forEach(cont, function(value, key) {
+			// 如果键值对的属性是一个引用对象
+			if (kit.isObject(cont[key]) || kit.isArray(cont[key])) {
+				object[key] = arg(cont[key], res[key]);
+
+			// 如果是一个简单对象，则直接赋值
+			} else {
+				object[key] = cont[key];
+			}
+		});
+		return object;
+	};
+
+	// 糅合属性方法
 	kit.mixin = function() {
 
 		var total,
@@ -314,38 +348,19 @@
 			// 深度克隆
 			if (flag == true) {
 
-				// 用递归方法拷贝深层次对象,得到全新对象
-				temporary = (function (cont) {
-
-					//这里增加了数组处理，暂时还不清楚函数体如何进行复制。
-					var object = (cont instanceof Array) ? [] : {};
-
-					// 注意这里不能用forEach,不然就得不到arguments.callee作用域
-					for (var i in cont) {
-						
-						// 如果是一个引用对象			
-						if (kit.isObject(cont[i]) === true) {
-							object[i] = arguments.callee(cont[i]); 	
-
-						// 如果是一个简单对象，则直接赋值		
-						} else {
-							object[i] = cont[i];		
-						}
-					} 
-					return object;
-				})(total);
+				temporary = _recursive(total, result);
 
 				// 得到temporary后进行浅复制
 				kit.forEach(temporary, function(value, key) {
 					result[key] = value;
-				})
+				});
 
 			// 浅复制
 			} else {
 
 				kit.forEach(total, function(value, key) {
 					result[key] = value;
-				})
+				});
 			}
 		}
 		return result;
@@ -452,43 +467,97 @@
 		document.body.appendChild(script);
 	};
 
+	// 指定bind对象，原生bind
+	kit.bind = function (context, fn) {
+
+		var final = null;
+		// 闭包保留内存context与fn
+		if (kit.isFunction(fn)) {
+			final = function() {
+				fn.apply(context, arguments);
+			};
+		} else {
+			// 如果不是回调函数，直接返回fn
+			final = fn;
+		}
+
+		return final;
+	};
+
 	// 数据模型，比如总参数，总配置，分段参数等
-    // 如new一个opts = new kie.Model({a:1,b:2}, function(){alert(1)});
-	kit.Model = function(total, changeFunction) {
+    // 如new一个
+    // opts = new kit.Model({a:1,b:2});
+	kit.Model = function(total) {
 		if (this instanceof kit.Model) {
 			this._options = total;
-			this._changeFunction = changeFunction;
+			// this._changeFunction = changeFunction;
 		} else {
 			return new kit.Model(total);
 		}
 	};
 
-	// 只有数据模型才具有的set,get方法
-	kit.Model.prototype.get = function(key) {
-		return this._options[key];
+	// 模型的原型链方法
+	kit.Model.prototype = {
+		constructor: kit.Model,
+		// 只有数据模型才具有的set,get方法
+		get: function(key) {
+			return this._options[key];
+		},
+		// 设置模型的值
+		set: function(value) {
+
+			var temporary = this._isChanged(this._options, value),
+				final = kit.mixin(true, this._options, value);
+
+			if (temporary === false) {
+				this.change(final);
+			}
+			return final;
+		},
+		// 触发变动
+		change: function(final) {
+			console.log("mode发生了变动");
+			// console.log(final);
+		},
+		// 判断参数(obj/arr)覆盖原值后原值是否改变
+		_isChanged: function (total, add) {
+			return kit(add).some(function(value, key) {
+				return value == total[key];
+			});
+		}
 	};
 
-	// 设置模型的值
-	kit.Model.prototype.set = function(value) {
+	// 控制器
+	// 将this强制绑定到控制器本身，用于this调用
+	// 暂时只用于单纯的放下业务逻辑
+	kit.Controller = function(fn) {
+		if (this instanceof kit.Controller) {
 
-		var temporary = this._options;
-		var final = kit.mixin(true, this._options, value);
+			// 控制器遍历将this指向变更
+			var controlEach = kit.bind(this, function(value, key) {
 
-		this.change(final);
-		return final;
+				// 将绑定到dom的this指向改变
+				this[key] = kit.bind(this, value);
+
+				// 不改变dom的this指向
+				// this[key] = value;
+			});
+
+			kit.forEach(fn, controlEach);
+			// this.fn = fn;
+		} else {
+			return new kit.Controller(fn);
+		}
 	};
 
-
-	kit.Model.prototype.change = function(final) {
-		this._changeFunction(final);
-	};
-
-	// 通过视图绑定页面事件
+	// 通过视图绑定页面事件,是Model与Controller的载体
 	// kit.View({
-	// 	current:document,
+	// 	current: document,
+	//  control: control,
 	// 	events:{
-	// 		".aaa": "fn1 click",
-	// 		".bbb": "fn2 change"
+	// 		"div": "click fn1", // 当心"aa bb "这种情况trim去除
+	// 		".bbb": "change fn2",
+	//		"#ccc": "fn3"
 	// 	}
 	// });
 	kit.View = function(total) {
@@ -496,12 +565,64 @@
 		if (this instanceof kit.View) {
 
 			// 事件代理总对象
-			this.current = total.current || document;
-			this.arr = total.events;
+			this._current = total.current || document;
+
+			// 控制器函数指向，control用于内部调用
+			// this._Controller = this.control = total.control;
+
+			// 事件绑定函数
+			this._eventsFunction = total.eventsFunction;
+
+			// 触发事件绑定
+			this.bindEvent(total.events);
+
+			// 触发初始化事件
+			total.initialize();
 		} else {
 			return new kit.View(total);
 		}
 	};
+
+	// 视图原型方法
+	kit.View.prototype = {
+		constructor: kit.View,
+		bindEvent: function(events) {
+			// var _this = this;
+			var callback = function(value, key) {
+
+				// 去除两边空格，并拆分
+				var eventType = "",
+					fn = null,
+					arr = kit.splitSpace(kit.trim(value));
+
+				if (arr.length === 1) {
+					eventType = "click";
+					fn = arr[0];
+				} else if (arr.length >= 2) {
+					eventType = arr[0];
+					fn = arr[1];
+				}
+
+				// 处理事件函数不存在的情况，jq给的提示不明显
+				if (this._eventsFunction[fn] === undefined) {
+					throw Error(fn + "函数不存在");
+				}
+
+				$(this._current).on(eventType, key, this._eventsFunction[fn]);
+			};
+
+			callback = kit.bind(this, callback);
+			kit.each(events, callback);
+		}
+	};
+
+	// 出现错误的时候执行的全局操作
+	kit.error = function(fn) {
+		window.onerror = function() {
+			fn();
+		}
+	};
+
 	// 发布订阅callback
 	// 写一个新闻滚动栏组件
 	// 埋点那个考虑下切换这种情况
@@ -570,8 +691,8 @@
 	// 如果是"desc",则倒叙，从大到小
 	//arr = [85, 24, 63, 45, 17, 31, 96, 50];
 	kit.sort = function() {
-		// 冒泡排序法
 
+		// 冒泡排序法排序
 		var temp,
 			flag = false,// 是否交换过
 			state = false,// 是否需要倒序
@@ -681,12 +802,6 @@
 				   "&url=http://" + host + url;
 
 		root.location.href = href;
-	};
-
-	// 拆分一个字符串中间有间隔的字符串
-	// 如："aaa    bbb cc    ddd"
-	kit.splitSpace = function(str) {
-		return str.split(/\s+/g);
 	};
 
 	// 执行一次的函数包装器
