@@ -1,17 +1,16 @@
 # kit.js 
 
-> [(链接地址)](https://github.com/Kelichao/kit.js/blob/master/kit.js)
+> 方法:借鉴底线库的工具框架，包含一些常用方法，在兼容AMD模式的同时，兼顾了CMD，在seaJS中也能够正常包装 [(链接地址)](https://github.com/Kelichao/kit.js/blob/master/kit.js)
 
 ![image](https://cloud.githubusercontent.com/assets/18028533/21641353/2f50607c-d2b6-11e6-8ade-62447ebcabe5.png)
 
 > 博客日期2016-10-18
 
-### 方法:借鉴底线库的工具框架，包含一些常用方法，在兼容AMD模式的同时，兼顾了CMD，在seaJS中也能够正常包装
 <table>
 
 <thead>
 <tr>
-	<td>XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX方法名称XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX</td>
+	<td>方法名称</td>
 	<td>使用方法</td>
 </tr>
 </thead>
