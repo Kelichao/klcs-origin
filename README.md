@@ -1,7 +1,5 @@
-
+# 博客日期2016-10-18
 ![image](https://cloud.githubusercontent.com/assets/18028533/21637598/a0b04020-d2a2-11e6-8d57-c7e789aab9ef.png)
-
-## 开始用issue 写博客2016/10/18
 
 ### kit.js [(链接地址)](https://github.com/Kelichao/kit.js/blob/master/kit.js)
 
