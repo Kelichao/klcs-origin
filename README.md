@@ -152,7 +152,7 @@
 </tr>
 <tr>
 	<td>kit.Model/kit.Controller/kit.View</td> 
-	<td>mvc架构，使用详情见[issue](https://github.com/Kelichao/kit.js/issues/3)</td>
+	<td>mvc架构，使用详情见<a href="https://github.com/Kelichao/kit.js/issues/3">使用deom</a></td>
 </tr>
 </tbody>
 </table>
