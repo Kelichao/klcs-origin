@@ -490,8 +490,11 @@
     // opts = new kit.Model({a:1,b:2});
 	kit.Model = function(total) {
 		if (this instanceof kit.Model) {
+			var _this = this;
+
 			this._options = total;
 			// this._changeFunction = changeFunction;
+
 		} else {
 			return new kit.Model(total);
 		}
@@ -500,6 +503,11 @@
 	// 模型的原型链方法
 	kit.Model.prototype = {
 		constructor: kit.Model,
+		//有些情况下直接取值
+		// 最原始的取值法
+		self: function() {
+			return this._options;
+		},
 		// 只有数据模型才具有的set,get方法
 		get: function(key) {
 			return this._options[key];
@@ -548,6 +556,34 @@
 			// this.fn = fn;
 		} else {
 			return new kit.Controller(fn);
+		}
+	};
+
+	kit.Controller.prototype = {
+		constructor: kit.Controller,
+		// 回调队列
+		callback: function(parameter) {
+			var argue = parameter.argue;
+			var callback = parameter.callback;
+			var _this = this;
+			var callbackArray = [];
+
+			kit.forEach(callback, function(value, key) {
+
+				if (kit.isFunction(_this[value])) {
+					callbackArray.push(_this[value]);
+				} else {
+					console.info("有回调列队项不是函数");
+				}
+			});
+
+			this.deliver(callbackArray, argue);
+		},
+		// 触发列队
+		deliver: function(arr, argue) {
+			kit.forEach(arr, function(fn) {
+				fn.apply(1,argue);
+			});
 		}
 	};
 
@@ -686,17 +722,6 @@
 		}
 	};
 
-	// 集体绑定事件document
-	kit.eventCenter = function() {
-		// fn["aaa"]到时候用函数取得，"click"放在最后一位，默认没有就是click，有具体的就填写别的事件名
-		// 不要出现[".aaa", "click", fn["aaa"]]
-	};
-
-	// 得到想要的日期
-	kit.finallyDate = function() {
-
-	};
-
 	// 判断对象是否有某个属性
 	kit.paramType = function() {
 		// setTimeout(fn,0)// 可以排到队列的最后面，可以防止与route的改变冲突
@@ -711,11 +736,6 @@
 		  evaluate: /\{\{([\s\S]+?)\}\}/g,
 		  escape: /\{\{-([\s\S]+?)\}\}/g
 		};
-	};
-
-	// 客户端跳转命令
-	kit.clientCmd = function() {
-
 	};
 
 	// // 通过undescore模板渲染页面
