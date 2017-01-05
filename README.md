@@ -128,10 +128,10 @@
 	如果只传一个数组参数则进行正序排序</td>
 </tr>
 <tr>
-	<td>kit.route(callback)</td> 
+	<td>kit.route(callback[, arr])</td> 
 	<td>使用方法为传入一个函数参数，路由发生变化时就触发回调
 	kit.route(fucntion(hash){console.log(hash)})。
-	回调的第一个参数即hash值。注：hash值会改变浏览器历史记录</td>
+	回调的第一个参数即hash值。注：hash值会改变浏览器历史记录,如果不传arr则所有hash值都有效，都会触发回调，如果传了arr则只会根据范围内的hash变化而触发回调</td>
 </tr>
 <tr>
 	<td>kit.addScript(url[, callback])</td> 
