@@ -639,7 +639,10 @@
 	// 加减日期函数
 	// 没传分割符号默认是“-”
 	kit.timeHandle = function(inputTime, value, symbol) {
-		var totalTime = null;
+		var year = "",
+			month = "",
+			day = "",
+			totalTime = null;
 
 		symbol = symbol || "-";
 		// 格式化输入日期
@@ -648,11 +651,24 @@
 		// 得到目标日期
 		totalTime = (inputTime).setDate(inputTime.getDate() + value);
 		totalTime = new Date(totalTime);
-		
+
+		// 为月与日补0，凑成两位
+		year = totalTime.getFullYear();// getYear已经不推荐使用了
+		month = totalTime.getMonth() + 1// getMonth是从0月开始计数的
+		day = totalTime.getDate();
+
+		// 给日月补0
+		if (month < 10) {
+			month = "0" + month; 
+		}
+		if (day < 10) {
+			day = "0" + day;
+		}
+
 		// 拼接日期，我这边只做了年月日处理
-		totalTime = totalTime.getFullYear() + symbol +// getYear已经不推荐使用了
-					(totalTime.getMonth() + 1) + symbol +// getMonth是从0月开始计数的
-					totalTime.getDate();
+		totalTime = year + symbol +
+					month + symbol + 
+					day;
 
 		return totalTime;
 	};
