@@ -636,6 +636,26 @@
 
 	// 是否有disabled状态的函数无法点击
 
+	// 加减日期函数
+	// 没传分割符号默认是“-”
+	kit.timeHandle = function(inputTime, value, symbol) {
+		var totalTime = null;
+
+		symbol = symbol || "-";
+		// 格式化输入日期
+		inputTime = new Date(inputTime);
+		
+		// 得到目标日期
+		totalTime = (inputTime).setDate(inputTime.getDate() + value);
+		totalTime = new Date(totalTime);
+		
+		// 拼接日期，我这边只做了年月日处理
+		totalTime = totalTime.getFullYear() + symbol +// getYear已经不推荐使用了
+					(totalTime.getMonth() + 1) + symbol +// getMonth是从0月开始计数的
+					totalTime.getDate();
+
+		return totalTime;
+	};
 
 	// 客户端跳转OnClientCmd接口，动态引入api.js
 	// 在65上加载貌似是55ms还是比较快的
