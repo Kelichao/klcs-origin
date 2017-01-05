@@ -822,25 +822,39 @@
 
 		return names.sort();
 	};
+
+	// 全局路由值存放
+	var _route;
 	
 	// 监听路由变化
-	kit.route = function(fn, array) {
+	kit.route = function(callback, array) {
+
+		var flag = kit.isFunction(callback);
+		var flagArr = kit.isArray(array);
 
 		// 如果参数是函数，则进行绑定
-		if(kit.isFunction(fn) === true) {
+		if (flag) {
 			root.onhashchange = function() {
 
-				var flag = true;
+				// hash值其实有没有#都一样，没有的话自动会补
+				var hash = root.location.hash.substring(1);
 
-				if (1) {
+				// 如果有第二个参数且为数组
+				if (array !== undefined && flagArr) {
+					if (array.indexOf(hash) !== -1) {
 
+						_route = hash;
+
+						// 防止一样的hash触发事件
+						if (_route = hash) {
+							return;
+						}
+						
+						callback(hash);
+					}
+				} else {
+					callback(hash);
 				}
-
-				// 如果第二个参数是数组
-				if (kit.isArray(array) && array.length > 0) {
-					fn(root.location.hash.substring(1));
-				}
-				
 			}
 		}
 	};
