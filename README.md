@@ -154,5 +154,9 @@
 	<td>kit.Model/kit.Controller/kit.View</td> 
 	<td>mvc架构，使用详情见<a href="https://github.com/Kelichao/kit.js/issues/3">使用deom</a></td>
 </tr>
+<tr>
+	<td>kit.timeHandle(inputTime, value[, symbol])</td> 
+	<td>inputTime目标时间，value是改变天数，负整数是向前，symbol为分割符号。用于设定未来，或者以前的时间，并格式化输出。没传分割符号默认是“-”</td>
+</tr>
 </tbody>
 </table>
