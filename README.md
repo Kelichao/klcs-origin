@@ -162,5 +162,9 @@
 	<td>kit.tempRender(template, total, data)</td> 
 	<td>total可以是dom对象，也可以是jQuery对象或zepto对象。kit.tempRender("234234234{{=a}}", document.body,{a:"aaa"}) </td>
 </tr>
+<tr>
+	<td>kit.chartRender(option, total)</td> 
+	<td>渲染图表 echarts2</td>
+</tr>
 </tbody>
 </table>
