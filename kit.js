@@ -660,13 +660,9 @@
 		}
 	};
 
-	// 发布订阅callback
+	// setTimeout(fn,0)// 可以排到队列的最后面，可以防止与route的改变冲突
+
 	// 写一个新闻滚动栏组件
-	// 埋点那个考虑下切换这种情况
-
-	// 提取html标签里面内容的正则方法
-
-	//  看看能否建立一个订阅模式的函数
 
 	// 是否满足请求返回格式的状态函数记得补0
 
@@ -722,13 +718,10 @@
 		}
 	};
 
-	// 判断对象是否有某个属性
-	kit.paramType = function() {
-		// setTimeout(fn,0)// 可以排到队列的最后面，可以防止与route的改变冲突
-	};
 
 	// 启用underscore 启用Mustache.js类型模板
 	kit.underToMustache = function() {
+
 		// 设置Mustache.js类型的模板语法
 		// 这句话需要写在_.template()方法之前
 		_.templateSettings = {
@@ -738,10 +731,19 @@
 		};
 	};
 
-	// // 通过undescore模板渲染页面
-	// kit.underRender = function() {
+	// 通过undescore模板渲染页面
+	// kit.tempRender("<a>234234234<%=a%></a>", document.body,{a:"aaa"})
+	kit.tempRender = function(template, total, data) {
 
-	// };
+		var template = _.template(template);
+
+		var compiled = template(data);
+		if (total instanceof jQuery || total instanceof Zepto) {
+			total.html(compiled);
+		} else {
+			total.innerHTML = compiled;
+		}
+	};
 
 	// 冒泡排序法对数组进行排序
 	// 第一个参数如果是"asc"则是正序从小到大(默认)
@@ -849,7 +851,7 @@
 						if (_route = hash) {
 							return;
 						}
-						
+
 						callback(hash);
 					}
 				} else {
@@ -877,15 +879,15 @@
 
 	// 执行一次的函数包装器
 	kit.once = function(fn) {
-			var totalFn = fn;
-			if (kit.isFunction(totalFn) === false) {
-				throw "请传入函数方法";
-			}
-			return function() {
-				totalFn();
-				totalFn = new Function();
-			}
+		var totalFn = fn;
+		if (kit.isFunction(totalFn) === false) {
+			throw "请传入函数方法";
 		}
+		return function() {
+			totalFn();
+			totalFn = new Function();
+		}
+	};
 
 	// 为了能使用OOP形式的调用，将kit的所有方法挂载到原型
 	// 去除不是function类型的。
