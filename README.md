@@ -158,5 +158,9 @@
 	<td>kit.timeHandle(inputTime, value[, symbol])</td> 
 	<td>inputTime目标时间，value是改变天数，负整数是向前，symbol为分割符号。用于设定未来，或者以前的时间，并格式化输出。没传分割符号默认是“-”</td>
 </tr>
+<tr>
+	<td>kit.tempRender(template, total, data)</td> 
+	<td>total可以是dom对象，也可以是jQuery对象或zepto对象。kit.tempRender("<a>234234234<%=a%></a>", document.body,{a:"aaa"}) </td>
+</tr>
 </tbody>
 </table>
