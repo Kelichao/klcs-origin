@@ -160,7 +160,7 @@
 </tr>
 <tr>
 	<td>kit.tempRender(template, total, data)</td> 
-	<td>total可以是dom对象，也可以是jQuery对象或zepto对象。kit.tempRender("<a>234234234<%=a%></a>", document.body,{a:"aaa"}) </td>
+	<td>total可以是dom对象，也可以是jQuery对象或zepto对象。kit.tempRender("\<a\>234234234\{{=a}}\</a\>", document.body,{a:"aaa"}) </td>
 </tr>
 </tbody>
 </table>
