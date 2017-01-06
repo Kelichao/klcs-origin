@@ -660,6 +660,21 @@
 		}
 	};
 
+	// 渲染图表 echarts2
+	kit.chartRender = function(option, total) {
+		var proChart = null;
+
+		if(total instanceof jQuery || total instanceof Zepto) {
+			total = total.get(0);
+		}
+
+		// 这里需要原生dom节点
+		proChart = echarts.init(total);
+
+		//传入参数
+		proChart.setOption(option, true);
+	};
+
 	// setTimeout(fn,0)// 可以排到队列的最后面，可以防止与route的改变冲突
 
 	// 写一个新闻滚动栏组件
