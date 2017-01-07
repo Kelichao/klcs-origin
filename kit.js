@@ -146,6 +146,25 @@
 		}
 	};
 
+	// 判断对象或者数组是否为空
+	kit.isEmpty = function(total) {
+		var flag = true;
+		if (kit.isObject(total)) {
+			kit.some(total, function() {
+				flag = false;
+				return false;
+			})
+		} else if (kit.isArray(total)) {
+			if (total.length > 0) {
+				flag = false;
+			}
+		} else {
+			flag = false;
+		}
+
+		return flag;
+	};
+
 	// some如果有一项返回false则返回false
 	kit.some = function(total, fn) {
 		var flag = "";
@@ -673,6 +692,11 @@
 
 		//传入参数
 		proChart.setOption(option, true);
+	};
+
+	// 判断一个对象是否是空对象
+	kit.emptyObj = function(object) {
+		
 	};
 
 	// setTimeout(fn,0)// 可以排到队列的最后面，可以防止与route的改变冲突
