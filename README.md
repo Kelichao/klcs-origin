@@ -164,7 +164,11 @@
 </tr>
 <tr>
 	<td>kit.chartRender(option, total)</td> 
-	<td>渲染图表 echarts2</td>
+	<td>渲染图表 echarts2版本插件</td>
+</tr>
+<tr>
+	<td>kit.isEmpty(total)</td> 
+	<td>判断对象或者数组是否为空，如果是空则返回true,如果是以上两个类型以外的类型，则一律返回true</td>
 </tr>
 </tbody>
 </table>
