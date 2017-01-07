@@ -158,8 +158,6 @@
 			if (total.length > 0) {
 				flag = false;
 			}
-		} else {
-			flag = false;
 		}
 
 		return flag;
