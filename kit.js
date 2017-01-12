@@ -492,7 +492,7 @@
 		// 闭包保留内存context与fn
 		if (kit.isFunction(fn)) {
 			final = function() {
-				fn.apply(context, arguments);
+				return fn.apply(context, arguments);
 			};
 		} else {
 			// 如果不是回调函数，直接返回fn
