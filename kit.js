@@ -158,7 +158,7 @@
 			if (total.length > 0) {
 				flag = false;
 			}
-		}
+		} 
 
 		return flag;
 	};
@@ -384,11 +384,11 @@
 		return result;
 	};
 
-	var query = function(id) {
+	kit.query = function(id) {
 		return document.querySelector(id);
 	};
 
-	var selects = function(class1) {
+	kit.querys = function(class1) {
 		return document.querySelectorAll(class1);
 	};
 
@@ -1020,4 +1020,3 @@
 	}
 
 }.call(this));
-
