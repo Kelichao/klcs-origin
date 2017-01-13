@@ -770,13 +770,13 @@
 
 	// 通过undescore模板渲染页面
 	// kit.tempRender("<a>234234234<%=a%></a>", document.body,{a:"aaa"})
-	kit.tempRender = function(template, total, data) {
+	kit.tempRender = function(template, total, data, type) {
 
 		var template = _.template(template);
 
 		var compiled = template(data);
 		if (total instanceof jQuery || total instanceof Zepto) {
-			total.html(compiled);
+			total[type || "html"](compiled);
 		} else {
 			total.innerHTML = compiled;
 		}
@@ -1020,3 +1020,6 @@
 	}
 
 }.call(this));
+
+
+
