@@ -670,6 +670,32 @@
 		}
 	};
 
+	// 初始化ajax步骤
+	// total{before:fn1,complete:fn2}
+	kit.ajaxInit = function(total) {
+
+		// 初始化aiax步骤
+		$.ajaxSetup({
+			dataType: "json",
+			beforeSend: function() {
+				if (kit.isFunction(total.before)) {
+					total.before();
+				}
+			},
+			type: "GET",
+			complete: function() {
+				if (kit.isFunction(total.complete)) {
+					total.complete();
+				}
+			},
+			error: function(xhr, text, type) {
+				console.warn("请求错误：errno=" + xhr.status + 
+							 ";statusText=" + xhr.statusText + 
+							 ";responseText=" + xhr.responseText);
+			}
+		});
+	};
+
 	// 出现错误的时候执行的全局操作
 	kit.error = function(fn) {
 		window.onerror = function() {
