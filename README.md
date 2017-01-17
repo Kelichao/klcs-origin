@@ -16,6 +16,10 @@
 </thead>
 <tbody>
 <tr>
+	<td>kit.Model/kit.Controller/kit.View</td> 
+	<td>mvc架构，使用详情见<a href="https://github.com/Kelichao/kit.js/issues/3">使用deom</a></td>
+</tr>
+<tr>
 	<td >kit.method(obj)</td> 
 	<td>为对象上挂载的函数体排序生成数组名，除去变量值,返回一个新数组</td>
 </tr>
@@ -149,10 +153,6 @@
 <tr>
 	<td>kit.error(fn)</td> 
 	<td>window.onerror触发之后的执行函数</td>
-</tr>
-<tr>
-	<td>kit.Model/kit.Controller/kit.View</td> 
-	<td>mvc架构，使用详情见<a href="https://github.com/Kelichao/kit.js/issues/3">使用deom</a></td>
 </tr>
 <tr>
 	<td>kit.timeHandle(inputTime, value[, symbol])</td> 
