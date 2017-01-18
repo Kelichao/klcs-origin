@@ -718,16 +718,55 @@
 		proChart.setOption(option, true);
 	};
 
-	// 判断一个对象是否是空对象
-	kit.emptyObj = function(object) {
-		
+	// setTimeout(fn,0)// 可以排到队列的最后面，可以防止与route的改变冲突
+	kit.finalExec = function(fn) {
+		// 把该运行代码放到底部执行
+		setTimeout(function() {
+			fn();
+		},0);
 	};
 
-	// setTimeout(fn,0)// 可以排到队列的最后面，可以防止与route的改变冲突
-
-	// 写一个新闻滚动栏组件
-
 	// 是否满足请求返回格式的状态函数记得补0
+	// 传入对象
+	// var obj = {
+	// 	   response: resp,// 数据源
+	// 	   haveData: fn1,// 存在数据,存在数据要分两种情况
+	//     // 部分无数据与全部有数据
+	// 	   noData:fn2// 不存在数据
+	// }
+	kit.triggerSuccess = function(receive) {
+		var respText = "",
+			resp = receive.response,
+			noData = receive.noData,
+			haveData = receive.haveData;
+
+		// 第一步，确定返回格式是对象，防止返回是乱码的情况
+		if (kit.isObject(resp)) {
+			respText = "response is object;";
+
+			// 第二步，判断是否存在数据
+			if (resp.errno == 0) {
+
+				// 存在数据
+				respText += "existence data;";
+				console.info(respText);
+				haveData(resp.data);
+
+			// 如果存在errno(防止resp是个空对象)，且错误码不为0
+			} else if (resp.errno && resp.errno != 0) {
+
+				// 不存在数据
+				respText += "no data;";
+				console.info(respText);
+				noData();
+			}
+		} else {
+
+			// 返回不为对象,可能是乱码
+			respText = "response is'not object;";
+			console.warn(respText);
+		}
+	};
 
 	// 是否有disabled状态的函数无法点击
 
