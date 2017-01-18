@@ -17,7 +17,7 @@
 <tbody>
 <tr>
 	<td>kit.Model/kit.Controller/kit.View</td> 
-	<td>mvc架构，使用详情见<a href="https://github.com/Kelichao/kit.js/issues/3">使用deom</a></td>
+	<td>mvc架构，使用详情见<a href="https://github.com/Kelichao/kit.js/issues/3">使用demo</a></td>
 </tr>
 <tr>
 	<td >kit.method(obj)</td> 
@@ -176,7 +176,7 @@
 </tr>
 <tr>
 	<td>kit.triggerSuccess(receive)</td> 
-	<td>ajax请求成功后。 传入一个对象 obj = {response: resp,// 数据源  haveData: fn1,// 存在数据,存在数据要分两种情况// 部分无数据与全部有数据 noData:fn2// 不存在数据}    在内部按照事先定好的请求数据格式进行函数的调用</td>
+	<td>ajax请求成功后<a href="https://github.com/Kelichao/Ajax/issues/6">(ajax请求返回格式标准)</a>(https://github.com/Kelichao/Ajax/issues/6)。 传入一个对象 obj = {response: resp,// 数据源  haveData: fn1,// 存在数据,存在数据要分两种情况// 部分无数据与全部有数据 noData:fn2// 不存在数据}    在内部按照事先定好的请求数据格式进行函数的调用</td>
 </tr>
 <tr>
 	<td>kit.finalExec(fn)</td> 
