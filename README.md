@@ -174,5 +174,13 @@
 	<td>kit.ajaxInit(total)</td> 
 	<td>total为对象组成，total{before:fn1,complete:fn2} fn1与fn2都必须要为函数</td>
 </tr>
+<tr>
+	<td>kit.triggerSuccess(receive)</td> 
+	<td>ajax请求成功后。 传入一个对象 obj = {response: resp,// 数据源  haveData: fn1,// 存在数据,存在数据要分两种情况// 部分无数据与全部有数据 noData:fn2// 不存在数据}    在内部按照事先定好的请求数据格式进行函数的调用</td>
+</tr>
+<tr>
+	<td>kit.finalExec(fn)</td> 
+	<td>把该运行代码放到队列底部执行</td>
+</tr>
 </tbody>
 </table>
