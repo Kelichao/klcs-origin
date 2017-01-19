@@ -61,17 +61,17 @@
 	};
 
 	//原型对象挂载简写
-	fn = kit.fn = kit.prototype;
+	var fn = kit.fn = kit.prototype;
 
 	// 兼容node模块
 	// node中有exports/module.exports模块用于导出某个js文件
 	// node中可以用CMD模式调用此文件：var MATH = require("./MATH") 
 	// 直接检验exports 是兼顾老版本nodeAPI
-	if (typeof exports !== 'undefined') {
+	if (typeof exports !== "undefined") {
 
 		// 在正常node环境中
 		// module以及module.exports都存在
-	  	if (typeof module !== 'undefined' && module.exports) {
+	  	if (typeof module !== "undefined" && module.exports) {
 
 	  	// exports 原本挂载的是module.exports对象地址，
 	  	// 如果重写module.exports为kit对象则需要顺带
@@ -132,16 +132,16 @@
 	_creatrTypeFunction(typeMap);
 
 	// forEach负责用来遍历对象/数组属性
-	kit.each = kit.forEach = function(total, fn, context) {
+	kit.each = kit.forEach = function(total, fn) {
 
 		if (kit.isObject(total) || kit.isFunction(total)) {
 			for(var i in total) {
-				fn(total[i], i);
+				fn(total[i], i, total);
 			}
 		} else if (kit.isArray(total)) {
-			var i = 0;
-			for (; i < total.length; i++) {
-				fn(total[i], i);
+			var j = 0;
+			for (; j < total.length; j++) {
+				fn(total[j], j,  total);
 			}
 		}
 	};
@@ -153,7 +153,7 @@
 			kit.some(total, function() {
 				flag = false;
 				return false;
-			})
+			});
 		} else if (kit.isArray(total)) {
 			if (total.length > 0) {
 				flag = false;
@@ -174,8 +174,8 @@
 				}
 			}
 		} else if (kit.isArray(total)) {
-			for (var i=0; i < total.length; i++) {
-				flag = fn(total[i], i);
+			for (var j=0; j < total.length; j++) {
+				flag = fn(total[j], j);
 				if (flag === false) {
 					return false;
 				}
@@ -184,7 +184,7 @@
 
 		// 没有返回false的项目
 		return true;
-	}
+	};
 
 	// 拆分一个字符串中间有间隔的字符串
 	// 如："aaa    bbb cc    ddd"
@@ -227,7 +227,7 @@
 	        final = null,
 	        cont = "";
 
-	    if (typeof str == 'string' && str.length != 0) {
+	    if (typeof str === "string" && str.length !== 0) {
 
 	    	// 注意，window.location.search 截取的串都是带问号的
 			// 如果有问号则去除问号
@@ -236,7 +236,7 @@
 			}
 
 	        arr = str.split(type);
-	        kit.forEach(arr,function(value, key) {
+	        kit.forEach(arr,function(value) {
 	        	cont = value.split("=");
 	            first = kit.trim(cont[0]);
 				final = kit.trim(cont[1]);
@@ -345,7 +345,6 @@
 			temporary = {},
 			length = arguments.length;
 
-
 		// 如果第一个是状态码，把total换到arg[1];
 		if (typeof arguments[i] === "boolean") {
 		 	flag = arguments[i];
@@ -364,7 +363,7 @@
 			total = arguments[i];
 
 			// 深度克隆
-			if (flag == true) {
+			if (flag === true) {
 
 				temporary = _recursive(total, result);
 
@@ -413,7 +412,7 @@
 	// 网页加载后直接触发
 	kit.ta = function(param, type) {
 
-		var type = type || "mousedown";
+		type = type || "mousedown";
 		// 内部实现ta的方法
 		function _ta(param) {
 			if (kit.isObject(param)) {
@@ -431,7 +430,7 @@
 					});
 				}
 			} else if (kit.isArray(param)) {
-				kit.forEach(param, function(value, key) {
+				kit.forEach(param, function(value) {
 					// 触发埋点方式
 					TA.log({"id": value,"ld": "client","client_userid": CLIENT_USERID,"send_time": ""});
 				});
@@ -474,12 +473,12 @@
 			script.onreadystatechange = function() {
 
 				// IE8中这两个属性值会有两个阶段  1.loading   2.loaded 某些情况下是complete
-				if(script.readyState === "loaded"|| script.readyState === 'complete') {
+				if(script.readyState === "loaded"|| script.readyState === "complete") {
 
 					// success code
 					callback();
 				}
-			}
+			};
 		}
 
 		document.body.appendChild(script);
@@ -507,8 +506,6 @@
     // opts = new kit.Model({a:1,b:2});
 	kit.Model = function(total) {
 		if (this instanceof kit.Model) {
-			var _this = this;
-
 			this._options = total;
 			// this._changeFunction = changeFunction;
 
@@ -542,7 +539,7 @@
 		},
 		// 触发变动
 		change: function(final) {
-			console.log("mode发生了变动");
+			// console.log("mode发生了变动");
 			// console.log(final);
 		},
 		// 判断参数(obj/arr)覆盖原值后原值是否改变
@@ -585,7 +582,7 @@
 			var _this = this;
 			var callbackArray = [];
 
-			kit.forEach(callback, function(value, key) {
+			kit.forEach(callback, function(value) {
 
 				if (kit.isFunction(_this[value])) {
 					callbackArray.push(_this[value]);
@@ -688,10 +685,9 @@
 					total.complete();
 				}
 			},
-			error: function(xhr, text, type) {
+			error: function(xhr) {
 				console.warn("请求错误：errno=" + xhr.status + 
-							 ";statusText=" + xhr.statusText + 
-							 ";responseText=" + xhr.responseText);
+							 ";statusText=" + xhr.statusText);
 			}
 		});
 	};
@@ -700,7 +696,7 @@
 	kit.error = function(fn) {
 		window.onerror = function() {
 			fn();
-		}
+		};
 	};
 
 	// 渲染图表 echarts2
@@ -745,7 +741,7 @@
 			respText = "response is object;";
 
 			// 第二步，判断是否存在数据
-			if (resp.errno == 0) {
+			if (resp.errno === 0) {
 
 				// 存在数据
 				respText += "existence data;";
@@ -753,7 +749,7 @@
 				haveData(resp.data);
 
 			// 如果存在errno(防止resp是个空对象)，且错误码不为0
-			} else if (resp.errno && resp.errno != 0) {
+			} else if (resp.errno && resp.errno !== 0) {
 
 				// 不存在数据
 				respText += "no data;";
@@ -788,7 +784,7 @@
 
 		// 为月与日补0，凑成两位
 		year = totalTime.getFullYear();// getYear已经不推荐使用了
-		month = totalTime.getMonth() + 1// getMonth是从0月开始计数的
+		month = totalTime.getMonth() + 1;// getMonth是从0月开始计数的
 		day = totalTime.getDate();
 
 		// 给日月补0
@@ -837,7 +833,7 @@
 	// kit.tempRender("<a>234234234<%=a%></a>", document.body,{a:"aaa"})
 	kit.tempRender = function(template, total, data, type) {
 
-		var template = _.template(template);
+		template = _.template(template);
 
 		var compiled = template(data);
 		if (total instanceof jQuery || total instanceof Zepto) {
@@ -950,7 +946,7 @@
 						_route = hash;
 
 						// 防止一样的hash触发事件
-						if (_route = hash) {
+						if (_route === hash) {
 							return;
 						}
 
@@ -959,7 +955,7 @@
 				} else {
 					callback(hash);
 				}
-			}
+			};
 		}
 	};
 
@@ -970,7 +966,8 @@
 
 		// replace不适合截取
 		var typeArray = url.match(/\.(\w{2,4})?$/g);
-		var type = typeArray ? typeArray[0] : null || type;
+		
+		type = typeArray ? typeArray[0] : null || type;
 
 		// 注意这里一定要有type,不然导致整个页面链接改变
 		var href = "ifind://!command=down&valuectrl=1&filename=" + name + type + 
@@ -988,7 +985,7 @@
 		return function() {
 			totalFn();
 			totalFn = new Function();
-		}
+		};
 	};
 
 	// 为了能使用OOP形式的调用，将kit的所有方法挂载到原型
@@ -1013,7 +1010,7 @@
 			sortFuncName = kit.method(target);
 
 		// 如果第一个参数是布尔状态,就把对象切到第二个参数
-		if (typeof target === "Boolean") {
+		if (typeof target === "boolean") {
 			target = arguments[1] || {};
 			i++;
 		}
@@ -1024,7 +1021,7 @@
 		}
 
 		if (length === 1) {
-			kit.forEach(sortFuncName, function(value, key) {
+			kit.forEach(sortFuncName, function(value) {
 
 				// 1.挂载到对象名下
 				// 2.挂载到原型链上
