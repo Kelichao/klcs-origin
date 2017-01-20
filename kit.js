@@ -576,28 +576,47 @@
 	kit.Controller.prototype = {
 		constructor: kit.Controller,
 		// 回调队列
+		// 回调列队使用方法
 		callback: function(parameter) {
-			var argue = parameter.argue;
-			var callback = parameter.callback;
-			var _this = this;
-			var callbackArray = [];
+			var callback = parameter.callback,
+				queue = parameter.queue,
+				callbackArray = [],
+				bindFn = kit.bind(this,function(value) {
+					if (kit.isFunction(this[value])) {
+						callbackArray.push(this[value]);
+					} else {
+						this.myLog(value);
+					}
+				});
 
-			kit.forEach(callback, function(value) {
+			// 集成callback
+			kit.forEach(callback, bindFn);
 
-				if (kit.isFunction(_this[value])) {
-					callbackArray.push(_this[value]);
+			// 触发列队
+			this.deliver(callbackArray, queue);
+		},
+		myLog: function(value) {
+			console.info("callback:" + value + " is not a function");
+		},
+		// 触发列队
+		deliver: function(callArr, queue) {
+
+			var bindFn = kit.bind(this, function(value, key) {
+				if (kit.isFunction(this[key])) {
+					this[key].apply(null, value);
 				} else {
-					console.info("有回调列队项不是函数");
+					this.myLog(key);
 				}
 			});
 
-			this.deliver(callbackArray, argue);
-		},
-		// 触发列队
-		deliver: function(arr, argue) {
-			kit.forEach(arr, function(fn) {
-				fn.apply(1,argue);
+			// 触发普通列队
+			kit.forEach(callArr, function(fn) {
+				fn();
 			});
+
+			// 触发带参数的列队
+			// 集成queueArray
+			kit.forEach(queue, bindFn);
 		}
 	};
 
@@ -1078,7 +1097,7 @@
 	if(typeof define === "function" && define.cmd) {
 	  define(function() {
 	    return kit;
-	  })
+	  });
 	}
 
 }.call(this));
