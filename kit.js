@@ -1002,8 +1002,10 @@
 			throw "请传入函数方法";
 		}
 		return function() {
-			totalFn();
-			totalFn = new Function();
+			if (kit.isFunction(totalFn)) {
+				totalFn();
+				totalFn = null;
+			}
 		};
 	};
 
@@ -1102,5 +1104,7 @@
 
 }.call(this));
 
+// 绑定一个倒计时的逻辑
 
+// 做一个切换两数据源，三个数据源之间的切换
 
