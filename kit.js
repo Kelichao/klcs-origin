@@ -577,7 +577,7 @@
 		constructor: kit.Controller,
 		// 回调队列
 		// 回调列队使用方法
-		callback: function(parameter) {
+		subscribe: function(parameter) {
 			var callback = parameter.callback,
 				queue = parameter.queue,
 				callbackArray = [],
