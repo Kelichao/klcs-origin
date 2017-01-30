@@ -1,4 +1,5 @@
 # kit.js 
+![image](https://cloud.githubusercontent.com/assets/18028533/22412140/196757ea-e6e6-11e6-9b45-f6f3faa363c9.png)
 
 > 方法:借鉴底线库的工具框架，包含一些常用方法，在兼容AMD模式的同时，兼顾了CMD [(链接地址)](http://kelichao.github.io/)
 
