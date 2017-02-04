@@ -734,11 +734,10 @@
 	};
 
 	// setTimeout(fn,0)// 可以排到队列的最后面，可以防止与route的改变冲突
-	kit.finalExec = function(fn) {
+	kit.timeFinal = function(total, fn) {
+		var _setTimeout = kit.bind(total, fn);
 		// 把该运行代码放到底部执行
-		setTimeout(function() {
-			fn();
-		},0);
+		setTimeout(_setTimeout, 0);
 	};
 
 	// 是否满足请求返回格式的状态函数记得补0
@@ -782,8 +781,6 @@
 			console.warn(respText);
 		}
 	};
-
-	// 是否有disabled状态的函数无法点击
 
 	// 加减日期函数
 	// 没传分割符号默认是“-”
@@ -835,6 +832,41 @@
 		}
 	};
 
+	// 简单的promise包装器
+	kit.Promise = function() {
+
+		if (!(this instanceof kit.Promise)) {
+			return new kit.Promise();
+		}
+		//订阅列表
+		this.subscribeList = [];
+
+	};
+
+	kit.Promise.prototype = {
+		constructor: kit.Promise,
+		// 订阅
+		subscribe: function(fn) {
+			this.subscribeList.push(fn);
+			return this;
+		},
+		// 等待执行的函数
+		when: function(fn) {
+			// 加定时器可以放在队列尾部
+			kit.timeFinal(this, fn);
+			
+			return this;
+		},
+		// 触发事件执行
+		deliver: function() {
+			// this都指向Promise实例
+			var _forEach = kit.bind(this, function(value) {
+				value();
+			});
+
+			kit.forEach(this.subscribeList, _forEach);
+		}
+	};
 
 	// 启用underscore 启用Mustache.js类型模板
 	kit.underToMustache = function() {
@@ -1104,8 +1136,12 @@
 
 }.call(this));
 
+
+
+
+
 // 绑定一个倒计时的逻辑
 
-// 做一个切换两数据源，三个数据源之间的切换
+// 做一个切换两数据源，三个数据源之间的切换虚拟dom
 
 // 是否有disabled状态的函数无法点击
