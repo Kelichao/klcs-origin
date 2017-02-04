@@ -127,9 +127,9 @@
 	方法属性都会挂载到第一个对象target上面	</td>
 </tr>
 <tr>
-	<td>kit.sort("asc"/"desc")</td> 
+	<td>kit.sort(["asc"/"desc", ]arr)</td> 
 	<td>第一个参数如果是"asc"则是正序从小到大(默认), 如果是"desc",则倒叙，
-	如果只传一个数组参数则进行正序排序</td>
+	如果只传一个数组参数则进行正序排序,arr为需要排序的数组</td>
 </tr>
 <tr>
 	<td>kit.route(callback[, arr])</td> 
@@ -185,6 +185,10 @@
 <tr>
 	<td>kit.Promise()</td> 
 	<td>延迟执行的函数队列，<a href="https://github.com/Kelichao/kit.js/issues/5">使用方法</a></td>
+</tr>
+<tr>
+	<td>kit.binarySearch(arr, total)</td> 
+	<td>使用二分法查找数组中的指定的项,查找到返回一个对象如：Object {index: 5, total: 7}，如果该项不存在，则返回字符串"no this item"</td>
 </tr>
 </tbody>
 </table>
