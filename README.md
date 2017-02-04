@@ -1,4 +1,3 @@
-![image](https://cloud.githubusercontent.com/assets/18028533/22412140/196757ea-e6e6-11e6-9b45-f6f3faa363c9.png)
 
 > 方法:借鉴底线库的工具框架，包含一些常用方法，在兼容AMD模式的同时，兼顾了CMD [(链接地址)](http://kelichao.github.io/)
 
@@ -180,8 +179,15 @@
 	<td>ajax请求成功后<a href="https://github.com/Kelichao/Ajax/issues/6">(ajax请求返回格式标准)</a> 传入一个对象 obj = {response: resp,// 数据源  haveData: fn1,// 存在数据,存在数据要分两种情况// 部分无数据与全部有数据 noData:fn2// 不存在数据}    在内部按照事先定好的请求数据格式进行函数的调用</td>
 </tr>
 <tr>
-	<td>kit.finalExec(fn)</td> 
-	<td>把该运行代码放到队列底部执行</td>
+	<td>kit.timeFinal(total, fn)</td> 
+	<td>把该运行代码放到队列底部执行，total为this指向,fn为回调函数</td>
+</tr>
+<tr>
+	<td>kit.Promise()</td> 
+	<td>延迟执行的函数队列，<a href="https://github.com/Kelichao/kit.js/issues/5">使用方法</a></td>
 </tr>
 </tbody>
 </table>
+
+![image](https://cloud.githubusercontent.com/assets/18028533/22412140/196757ea-e6e6-11e6-9b45-f6f3faa363c9.png)
+
