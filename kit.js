@@ -898,7 +898,7 @@
 	// 第一个参数如果是"asc"则是正序从小到大(默认)
 	// 如果是"desc",则倒叙，从大到小
 	//arr = [85, 24, 63, 45, 17, 31, 96, 50];
-	kit.sort = function() {
+	kit.sort = function(arr) {
 
 		// 冒泡排序法排序
 		var temp,
@@ -959,6 +959,44 @@
 		}
 
 		return arr;
+	};
+
+	// 使用二分法查找数组中的指定的项
+	kit.binarySearch = function(arr, total) {
+
+	    var index = 0;
+
+	    function _wrap(arr, total) {
+	        var length = arr.length;
+	        var midIndex = Math.floor(length/2);
+
+	        if (length <= 1) {
+	            if (arr[0] == total) {
+	                return {
+	                    index: index,
+	                    total: total
+	                };
+	            }
+	            return "no this item";
+
+	        } else {
+	            if (arr[midIndex] > total) {
+
+	                return arguments.callee(arr.slice(0, midIndex), total);
+	            } else if (arr[midIndex] < total){
+	                index +=midIndex;
+	                return arguments.callee(arr.slice(midIndex), total);
+	            } else {
+	                index += midIndex;
+	                return {
+	                    index: index,
+	                    total: total
+	                };
+	            }
+	        }
+	    }
+
+	    return _wrap(arr, total);
 	};
 
 	// 内部对挂载的方法按名称进行排序
