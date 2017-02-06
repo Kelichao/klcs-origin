@@ -196,7 +196,7 @@
 </tr>
 <tr>
 	<td>kit.toggle(object)</td> 
-	<td>在同一个元素上触发事件的轮回方式，<a href="https://github.com/Kelichao/kit.js/issues/6">使用dome</a></td>
+	<td>在同一个元素上触发事件的轮回方式，传入对象ibject<a href="https://github.com/Kelichao/kit.js/issues/6">使用dome</a></td>
 </tr>
 <tr>
 	<td>kit.propertyNumber(total[, flag])</td> 
