@@ -110,7 +110,8 @@
 		"isNull":       "[object Null]",
 		"isRegExp":     "[object RegExp]",
 		"isNumber":     "[object Number]",
-		"isError":      "[object Error]"
+		"isError":      "[object Error]",
+		"isWindow":     "[object Window]"// win对象比较特别
 	};
 
 	// 内部生成对象判断函数
@@ -133,12 +134,16 @@
 
 	// forEach负责用来遍历对象/数组属性
 	kit.each = kit.forEach = function(total, fn) {
+		var isObj = kit.isObject(total);
+		var isFun = kit.isFunction(total);
+		var isWin = kit.isWindow(total);
+		var isArr = kit.isArray(total);
 
-		if (kit.isObject(total) || kit.isFunction(total)) {
+		if (isObj || isFun || isWin) {
 			for(var i in total) {
 				fn(total[i], i, total);
 			}
-		} else if (kit.isArray(total)) {
+		} else if (isArr) {
 			var j = 0;
 			for (; j < total.length; j++) {
 				fn(total[j], j,  total);
@@ -292,21 +297,6 @@
 		var x =kit.mixin(person);
 		person.sing.name = "";
 		console.log(x);
-	*/
-	// 糅合方法,注意这个方法不能在实例上使用
-	// kit.mixin(true, {a:1}, {b:2}, {c:3}, {d:4});
-	// kit.mixin( [deep ], target, object1 [, objectN ] )...
-	/*
-	    // 深度复制测试
-		var x = {
-			e:{
-				f:100
-			}
-		};
-		var b = {a:1};
-		kit.mixin(true,b, {d:22}, {c:33}, x);
-		x.e.f = 1111;
-		console.log(b.e.f) // 打出100说明复制正确
 	*/
 
 	// 用递归方法拷贝深层次对象,得到全新对象
@@ -733,6 +723,49 @@
 		proChart.setOption(option, true);
 	};
 
+	// 判断对象属性数量// flag为true则除去原型链上的属性
+	kit.propertyNumber = function(total, flag) {
+		var number = 0;
+
+			kit.forEach(total, function(value, key) {
+				if (flag === true) {
+					if (total.hasOwnProperty(key) === false){
+						// no code
+					} else {
+						number++;
+					}
+				} else {
+					number++;
+				}
+			});
+		return number;
+	};
+
+	// 切换数据源，类似于虚拟dom
+
+	kit.toggle = function(object) {
+		var items = object.items;
+		var el = object.el;
+		var fn = object.fn;
+		var _arr = [];
+		var index = 0;// 当前下标
+		var flag = object.isOwnProperty || false;
+		var length = kit.propertyNumber(items, flag);
+		var type = object.type || "click";
+
+
+		kit.forEach(items, function(value, key) {
+			_arr.push(key);
+		});
+		$(document).on(type, el, function(event) {
+			fn(items[_arr[index++]], event);
+			if (index === length) {
+				index = 0;
+			}
+		});
+
+	};
+
 	// setTimeout(fn,0)// 可以排到队列的最后面，可以防止与route的改变冲突
 	kit.timeFinal = function(total, fn) {
 		var _setTimeout = kit.bind(total, fn);
@@ -784,7 +817,7 @@
 
 	// 绑定一个倒计时
 	// time为秒数
-	kit.countDown = function(time, fn, flag) {
+	kit.countDown = function(time, fn) {
 		var _time = time;
 		setInterval(function() {
 			time--;
@@ -913,7 +946,7 @@
 	// 第一个参数如果是"asc"则是正序从小到大(默认)
 	// 如果是"desc",则倒叙，从大到小
 	//arr = [85, 24, 63, 45, 17, 31, 96, 50];
-	kit.sort = function(arr) {
+	kit.sort = function() {
 
 		// 冒泡排序法排序
 		var temp,
@@ -1189,7 +1222,5 @@
 
 }.call(this));
 
-
-// 做一个切换两数据源，三个数据源之间的切换虚拟dom
 
 // 是否有disabled状态的函数无法点击
