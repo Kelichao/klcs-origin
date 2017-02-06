@@ -91,7 +91,7 @@
 </tr>
 <tr>
 	<td>kit.clone</td> 
-	<td>第一个参数为克隆对象，如果第二个参数是true则使用递归深度复制</td>
+	<td>第一个参数为克隆对象，如果第二个参数是true则使用递归深度复制,<a href="https://github.com/Kelichao/kit.js/issues/7">使用demo</a></td>
 </tr>
 <tr>
 	<td>kit.query(selector)</td> 
