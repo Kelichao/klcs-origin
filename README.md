@@ -190,6 +190,10 @@
 	<td>kit.binarySearch(arr, total)</td> 
 	<td>使用二分法查找数组中的指定的项,查找到返回一个对象如：Object {index: 5, total: 7}，如果该项不存在，则返回字符串"no this item"</td>
 </tr>
+<tr>
+	<td>kit.countDown(time, fn)</td> 
+	<td>倒计时函数，time为计时数值，fn为每次变化后的回调，返回一个重置计时的函数体`var reset = kit.countDown(time, fn)`</td>
+</tr>
 </tbody>
 </table>
 
