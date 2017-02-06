@@ -782,6 +782,21 @@
 		}
 	};
 
+	// 绑定一个倒计时
+	// time为秒数
+	kit.countDown = function(time, fn, flag) {
+		var _time = time;
+		setInterval(function() {
+			time--;
+			var nowTime = time;
+			fn(nowTime, time);
+		}, 1000);
+
+		return function() {
+			time = _time;
+		};
+	};
+
 	// 加减日期函数
 	// 没传分割符号默认是“-”
 	kit.timeHandle = function(inputTime, value, symbol) {
@@ -1174,11 +1189,6 @@
 
 }.call(this));
 
-
-
-
-
-// 绑定一个倒计时的逻辑
 
 // 做一个切换两数据源，三个数据源之间的切换虚拟dom
 
