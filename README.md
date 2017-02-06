@@ -148,7 +148,7 @@
 </tr>
 <tr>
 	<td>kit.bind(total, fn)</td> 
-	<td>返回一个绑定this后的函数体</td>
+	<td>返回一个绑定this后的函数体，仿原生bind</td>
 </tr>
 <tr>
 	<td>kit.error(fn)</td> 
@@ -168,7 +168,7 @@
 </tr>
 <tr>
 	<td>kit.isEmpty(total)</td> 
-	<td>判断对象或者数组是否为空，如果是空则返回true,如果是以上两个类型以外的类型，则一律返回true</td>
+	<td>判断对象或者数组是否为空，由于空对象在布尔判断时始终是true值，所以需要使用这个方法判断里面是否没有键值对，如果是空则返回true,如果是以上两个类型以外的类型，则一律返回true</td>
 </tr>
 <tr>
 	<td>kit.ajaxInit(total)</td> 
@@ -192,7 +192,7 @@
 </tr>
 <tr>
 	<td>kit.countDown(time, fn)</td> 
-	<td>倒计时函数，time为计时数值，fn为每次变化后的回调，返回一个重置计时的函数体`var reset = kit.countDown(time, fn)`</td>
+	<td>倒计时函数，time为计时数值，fn为每次变化后的回调，返回一个重置计时的函数体var reset = kit.countDown(time, fn)</td>
 </tr>
 </tbody>
 </table>
