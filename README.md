@@ -194,6 +194,14 @@
 	<td>kit.countDown(time, fn)</td> 
 	<td>倒计时函数，time为计时数值，fn为每次变化后的回调，返回一个重置计时的函数体var reset = kit.countDown(time, fn)</td>
 </tr>
+<tr>
+	<td>kit.toggle(object)</td> 
+	<td>在同一个元素上触发事件的轮回方式，<a href="https://github.com/Kelichao/kit.js/issues/6">使用dome</a></td>
+</tr>
+<tr>
+	<td>kit.propertyNumber(total[, flag])</td> 
+	<td>判断对象属性数量,total为要计算属性数量的对象，flag为true则除去原型链上的属性</td>
+</tr>
 </tbody>
 </table>
 
