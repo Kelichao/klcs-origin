@@ -385,10 +385,12 @@
 	kit.tabToggle = function(elements, _class, fn) {
 		$(document).on("click", elements, function() {
 			var $this = $(this);
+			var index = $(this).index();
 			var data = $this.attr("tab-data");
 			$(elements).removeClass(_class);
 			$this.addClass(_class);
-			fn(data);
+			fn(data, index);
+
 		});
 	};
 
