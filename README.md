@@ -20,6 +20,10 @@
 	<td>mvc架构，使用详情见<a href="https://github.com/Kelichao/kit.js/issues/3">使用demo</a></td>
 </tr>
 <tr>
+	<td >kit.tabToggle(elements, _class, fn)</td> 
+	<td>elements为绑定事件的对象，节点属性需要设置为tab-data, _class为点击后添加的类名， fn为回调<a href="https://github.com/Kelichao/kit.js/issues/8">使用demo</a></td>
+</tr>
+<tr>
 	<td >kit.method(obj)</td> 
 	<td>为对象上挂载的函数体排序生成数组名，除去变量值,返回一个新数组</td>
 </tr>
