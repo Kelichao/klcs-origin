@@ -381,6 +381,17 @@
 		return document.querySelectorAll(class1);
 	};
 
+	// tab切换逻辑块
+	kit.tabToggle = function(elements, _class, fn) {
+		$(document).on("click", elements, function() {
+			var $this = $(this);
+			var data = $this.attr("tab-data");
+			$(elements).removeClass(_class);
+			$this.addClass(_class);
+			fn(data);
+		});
+	};
+
 	// 客户端用户id
 	var CLIENT_USERID;
 	kit.CLIENT_USERID = CLIENT_USERID = kit.cookie("userid");
