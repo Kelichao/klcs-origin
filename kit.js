@@ -382,11 +382,16 @@
 	};
 
 	// tab切换逻辑块
-	kit.tabToggle = function(elements, _class, fn) {
+	kit.tabToggle = function(elements, _class, fn, state) {
 		$(document).on("click", elements, function() {
 			var $this = $(this);
 			var index = $(this).index();
 			var data = $this.attr("tab-data");
+			var flag = $this.hasClass(_class);
+
+			if (state === true && flag === true) {
+				return;
+			}
 			$(elements).removeClass(_class);
 			$this.addClass(_class);
 			fn(data, index);
