@@ -254,6 +254,11 @@
 	<td>kit.propertyNumber(total[, flag])</td> 
 	<td>判断对象属性数量,total为要计算属性数量的对象，flag为true则除去原型链上的属性</td>
 </tr>
+<tr>
+        <td>47</td>
+	<td>kit.ajaxConstant({beforeSend:fn1, complete:fn2})</td> 
+	<td>ajax重复步骤的静态化，可以重复调用<a href="https://github.com/Kelichao/kit.js/issues/9">使用demo</a></td>
+</tr>
 </tbody>
 </table>
 
