@@ -259,6 +259,11 @@
 	<td>kit.ajaxConstant({beforeSend:fn1, complete:fn2})</td> 
 	<td>ajax重复步骤的静态化，可以重复调用<a href="https://github.com/Kelichao/kit.js/issues/9">使用demo</a></td>
 </tr>
+<tr>
+        <td>48</td>
+	<td>kit.ta_m(type, para)</td> 
+	<td>移动端埋点<a href="https://github.com/Kelichao/kit.js/issues/10">使用demo</a></td>
+</tr>
 </tbody>
 </table>
 
