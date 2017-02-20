@@ -458,6 +458,67 @@
 		_ta(param);
 	};
 
+	// 手机端埋点
+	// 移动端分为4种埋点
+	// 页面显示埋点: hxmPageStat(id)
+	// 非跳转点击埋点: hxmClickStat(id)
+	// 跳转手炒网页: hxmJumpPageStat(id1, id2)
+	// 跳转手炒客户端页: hxmJumpNativeStat(id1, id2)
+	kit.ta_m = function(type, para) {
+
+		var _doTa = function(fn) {
+			if (kit.isObject(para) === false) {
+				return;
+			}
+			kit.forEach(para, function(value, key) {
+				if (key !== "" && key !== []) {
+					$(document).on("click", key, function() {
+						if (kit.isArray(value)) {
+							fn(value[0], value[1]);
+						} else {
+							fn(value);
+						}
+					});
+				}
+			});
+		};
+
+		switch (type) {
+			case 1:
+				// 1模式是页面显示埋点
+				// ["id1", "id2"]
+				kit.forEach(para, function(value) {
+					hxmPageStat(value);
+				});
+				break;
+
+			case 2:
+				// 2模式是非跳转点击埋点
+				// 对象模式{".class": "id1"}
+				_doTa(function(value) {
+					hxmClickStat(value);
+				});
+				break;
+
+			case 3:
+				// 3模式是跳转手抄网页
+				// 由于跳转可能会导致没触发，跳转，
+				// 所以该事件委托要放在最先执行
+				// {".class": ["id1", "id2"]}
+				_doTa(function() {
+					hxmJumpPageStat(arguments[0], arguments[1]);
+				});
+				break;
+
+			case 4:
+				// 模式4是跳转手炒客户端页
+				// 做法与3类同
+				_doTa(function() {
+					hxmJumpPageStat(arguments[0], arguments[1]);
+				});
+		}
+	};
+
 	// 动态创建dom元素
 	kit.addScript = function(url, callback) {
 		// 创建dom元素
@@ -491,6 +552,41 @@
 
 		document.body.appendChild(script);
 	};
+
+	// 克隆
+	kit.clone = function (total) {
+		var res = null;
+		var flag = function() {
+			return typeof(total) != "object" || total === null;
+		};
+
+		// 是不是简单类型
+		if (flag(total)) {
+			return total;
+		}
+
+		// 引用类型区分对象/数组
+		if (total instanceof Object) {
+			res = {};
+			for (var i in total) {
+				if (flag(total[i])) {
+					return arguments.callee(total[i]);
+				} else {
+					res[i] = total[i];
+				}
+			}
+		} else if (total instanceof Array) {
+			res = [];
+			for (var j = 0; j < total.length; j++) {
+				if (flag(total[j])) {
+					return arguments.callee(total[j]);
+				} else {
+					res[j] = total[j];
+				}
+			}
+		}
+		return res;
+	}
 
 	// 指定bind对象，原生bind
 	kit.bind = function (context, fn) {
@@ -717,6 +813,39 @@
 							 ";statusText=" + xhr.statusText);
 			}
 		});
+	};
+
+	// 针对zepto中无ajaxSetup这个方法
+	// 添加一个已写的代码包装器ajax常量
+	// val = {beforeSend:fn1, complete:fn2};
+	kit.ajaxConstant = function(val) {
+
+		// var setupArray = ["beforeSend", "complete"];
+		var obj = {
+			dataType: "json",
+			type: "GET",
+			error: function(xhr) {
+				console.warn("请求错误：errno=" + xhr.status + 
+						";statusText=" + xhr.statusText);
+			}
+		};
+
+		if (kit.isObject(val) === false) {
+			val = {};
+		}
+		// kit.forEach(["beforeSend", "complete"], function(value, key) {
+		// 	if (key) {
+
+		// 	}
+		// });
+		kit.mixin(true, obj, val);
+
+		return function(add) {
+			var temp = kit.clone(obj);
+			kit.mixin(true, temp, add);
+			// 触发
+			$.ajax(temp);
+		}
 	};
 
 	// 出现错误的时候执行的全局操作
