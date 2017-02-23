@@ -135,7 +135,7 @@
 	<td>kit.ta(value[, type])</td> 
 	<td>埋点快捷方式，
 	传入对象{"ibyf130_3242": ".class1","iby2345_fre4": ".class2"} 进行dom绑定，
-	如果传入数组，则是载入页面调用。如果有第二个参数,则可以自行设定触发方式</td>
+	如果传入数组，则是载入页面调用。如果有第二个参数,则可以自行设定触发方式 <a href="https://github.com/Kelichao/kit.js/issues/11">使用demo</a></td>
 </tr>
 <tr>
         <td>26</td>
