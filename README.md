@@ -262,7 +262,7 @@
 <tr>
         <td>48</td>
 	<td>kit.ta_m(type, para)</td> 
-	<td>移动端埋点<a href="https://github.com/Kelichao/kit.js/issues/10">使用demo</a></td>
+	<td>移动端埋点<a href="https://github.com/Kelichao/kit.js/issues/11">使用demo</a></td>
 </tr>
 <tr>
         <td>49</td>
@@ -278,6 +278,11 @@
         <td>51</td>
 	<td>kit.signState([flag])</td> 
 	<td>返回用户名var userName = kit.signState();。kit.signState(true)// 验证是否登录，登录则不执行代码，还没登录则弹登录框;</td>
+</tr>
+<tr>
+        <td>52</td>
+	<td>kit.template(str, value[, symbol])</td> 
+	<td>需要传入一个数组,str是模板字符串, value是渲染数据的【数组】,symbol是无数据展示的内容<a href="https://github.com/Kelichao/kit.js/issues/12"></a></td>
 </tr>
 </tbody>
 </table>
