@@ -407,17 +407,7 @@
 	kit.CLIENT_VERSION = kit.cookie("version") ? kit.cookie("version").split(".").slice(-1)[0] : "";
 
 
-	// i客户端埋点快捷方法
-	// 调用此方法之前需要引入TA.js
-	// 此类对象方式需要点击，保险起见是mousedown
-	/*
-		{
-			"ibyf130_3242": ".class1",
-			"iby2345_fre4": ".class2"
-		}
-	*/
-	// 数组方式["ibyf130_3242","iby2345_fre4"]
-	// 网页加载后直接触发
+	// px客户端埋点快捷方法
 	kit.ta = function(param, type) {
 
 		type = type || "mousedown";
@@ -464,29 +454,39 @@
 	// 非跳转点击埋点: hxmClickStat(id)
 	// 跳转手炒网页: hxmJumpPageStat(id1, id2)
 	// 跳转手炒客户端页: hxmJumpNativeStat(id1, id2)
-	kit.ta_m = function(type, para) {
+	kit.ta_m = function(type, para, ext) {
 
 		var _doTa = function(fn) {
-			if (kit.isObject(para) === false) {
-				return;
+			// 如果是数组
+			if (kit.isArray(para) === true) {
+				kit.forEach(para, function(value) {
+					fn(value);
+				});
+			} else {
+				kit.forEach(para, function(value, key) {
+					if (key !== "" && key !== []) {
+						$(document).on("click", key, function() {
+							if (kit.isArray(value)) {
+								fn(value[0], value[1]);
+							} else {
+								fn(value);
+							}
+						});
+					}
+				});
 			}
-			kit.forEach(para, function(value, key) {
-				if (key !== "" && key !== []) {
-					$(document).on("click", key, function() {
-						if (kit.isArray(value)) {
-							fn(value[0], value[1]);
-						} else {
-							fn(value);
-						}
-					});
-				}
-			});
 		};
 
 		switch (type) {
 			case 1:
 				// 1模式是页面显示埋点
 				// ["id1", "id2"]
+				// 模式一如果传额外参数仍然只能传一个参数，
+				// 但参数由字符串变为对象，不然我会提示不合法
+				if (kit.isArray(para) === false) {
+					console.info("type1 need input arr");
+					return
+				}
 				kit.forEach(para, function(value) {
 					hxmPageStat(value);
 				});
@@ -495,8 +495,9 @@
 			case 2:
 				// 2模式是非跳转点击埋点
 				// 对象模式{".class": "id1"}
+				// 数组模式["id1", "id2"] // 用于触发页面位置的埋点
 				_doTa(function(value) {
-					hxmClickStat(value);
+					hxmClickStat(value, ext);
 				});
 				break;
 
@@ -506,7 +507,7 @@
 				// 所以该事件委托要放在最先执行
 				// {".class": ["id1", "id2"]}
 				_doTa(function() {
-					hxmJumpPageStat(arguments[0], arguments[1]);
+					hxmJumpPageStat(arguments[0], arguments[1], ext);
 				});
 				break;
 
@@ -514,10 +515,45 @@
 				// 模式4是跳转手炒客户端页
 				// 做法与3类同
 				_doTa(function() {
-					hxmJumpPageStat(arguments[0], arguments[1]);
+					hxmJumpPageStat(arguments[0], arguments[1], extend);
 				});
 		}
 	};
+
+	// 客户端匿名机制函数
+	// 用户名加星号
+	kit.encryptName = function(nameparam){
+	     var name = nameparam.toString();
+	     var len = name.length;
+	     var retName = '';
+	     switch(len){
+	         case 1:
+	             retName = name;
+	             break;
+	         case 2:
+	             var nameArr = name.split('');
+	             retName = nameArr[0]+'*';
+	             break;
+	         case 3:
+	             var nameArr = name.split('');
+	             retName = nameArr[0]+'*'+nameArr[len-1];
+	             break;
+	         case 4:
+	             var nameArr = name.split('');
+	             retName = nameArr[0]+'**'+nameArr[len-1];
+	             break;
+	         case 5:
+	             var nameArr = name.split('');
+	             retName = nameArr[0]+'***'+nameArr[len-1];
+	             break;
+	         default:
+	             var nameArr = name.split('');
+	             retName = name.substr(0,len-4)+'***'+nameArr[len-1];
+	             break;
+	     }
+
+	    return retName;
+	 };
 
 	// 动态创建dom元素
 	kit.addScript = function(url, callback) {
@@ -790,6 +826,42 @@
 		}
 	};
 
+	// 全局路由值存放
+	var _route;
+	
+	// 监听路由变化
+	kit.route = function(callback, array) {
+
+		var flag = kit.isFunction(callback);
+		var flagArr = kit.isArray(array);
+
+		// 如果参数是函数，则进行绑定
+		if (flag) {
+			root.onhashchange = function() {
+
+				// hash值其实有没有#都一样，没有的话自动会补
+				var hash = root.location.hash.substring(1);
+
+				// 如果有第二个参数且为数组
+				if (array !== undefined && flagArr) {
+					if (array.indexOf(hash) !== -1) {
+
+						_route = hash;
+
+						// 防止一样的hash触发事件
+						if (_route === hash) {
+							return;
+						}
+
+						callback(hash);
+					}
+				} else {
+					callback(hash);
+				}
+			};
+		}
+	};
+
 	// 初始化ajax步骤
 	// total{before:fn1,complete:fn2}
 	kit.ajaxInit = function(total) {
@@ -962,6 +1034,24 @@
 		}
 	};
 
+	// 是否登录var flag = kit.signState();// 返回用户名
+	// kit.signState(true)// 验证是否登录，登录则不执行代码，还没登录则弹登录框;
+	kit.signState = function(flag) {
+
+		// account的值为 0 或者 一个用户名
+		var account = getAccount();
+
+		// 如果有true 且 没有用户名
+		if (flag && account === 0) {
+			// 注意：这个协议要指定为http://
+			// 弹登录框
+			window.location.href = "http://eqhexin/changeUser";
+		} else {
+			// 如果没有flag则返回用户名
+			return account;
+		}
+	};
+
 	// 绑定一个倒计时
 	// time为秒数
 	kit.countDown = function(time, fn) {
@@ -985,7 +1075,7 @@
 			day = "",
 			totalTime = null;
 
-		symbol = symbol || "-";
+		symbol = (symbol === undefined ? "-" : symbol);
 		// 格式化输入日期
 		inputTime = new Date(inputTime);
 		
@@ -1060,6 +1150,27 @@
 			});
 
 			kit.forEach(this.subscribeList, _forEach);
+		}
+	};
+
+	// 初始化客户端字体 kit.initFontSize
+	kit.initFontSize = function(size) {
+
+		// 判断手机型号iphone或gphone
+		var model = getPlatform();
+		var def = size || 1;
+
+		// 此命令只需要安卓起作用
+		if (model == "gphone") {
+			callNativeHandler(
+			    'webViewFontController',
+
+			    // 1为默认字体，小字体设0
+			    '{"fontsize":"' + def + '", "switch":"0"}',
+			    function(data) {
+			    	// somecode
+			    }
+			);
 		}
 	};
 
@@ -1207,42 +1318,6 @@
 		return names.sort();
 	};
 
-	// 全局路由值存放
-	var _route;
-	
-	// 监听路由变化
-	kit.route = function(callback, array) {
-
-		var flag = kit.isFunction(callback);
-		var flagArr = kit.isArray(array);
-
-		// 如果参数是函数，则进行绑定
-		if (flag) {
-			root.onhashchange = function() {
-
-				// hash值其实有没有#都一样，没有的话自动会补
-				var hash = root.location.hash.substring(1);
-
-				// 如果有第二个参数且为数组
-				if (array !== undefined && flagArr) {
-					if (array.indexOf(hash) !== -1) {
-
-						_route = hash;
-
-						// 防止一样的hash触发事件
-						if (_route === hash) {
-							return;
-						}
-
-						callback(hash);
-					}
-				} else {
-					callback(hash);
-				}
-			};
-		}
-	};
-
 	// 调用客户端下载框 kit.clientDown("abc", "/thsft/Istrategy/abc.pdf", ".xls");
 	// type可选，如果url能够取到地址串，则不会被type覆盖，
 	// 如果地址串后面的url没有解析出类型，则会被type覆盖
@@ -1369,5 +1444,20 @@
 
 }.call(this));
 
+// 优化第一种埋点的埋点方式,统一改成对象调用，并将类别集成
 
-// 是否有disabled状态的函数无法点击
+
+
+// 简易模板
+
+
+
+
+// 客户端匿名机制函数  var newName = kit.encryptName(name);//返回值
+
+// 初始化客户端字体 kit.initFontSize([size]);
+
+// 查询用户登录状态，并给出登录界面	kit.signState()
+
+// 是否登录var flag = kit.signState();// 返回用户名
+// kit.signState(true)// 验证是否登录，登录则不执行代码，还没登录则弹登录框;
