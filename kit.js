@@ -454,16 +454,18 @@
 	// 非跳转点击埋点: hxmClickStat(id)
 	// 跳转手炒网页: hxmJumpPageStat(id1, id2)
 	// 跳转手炒客户端页: hxmJumpNativeStat(id1, id2)
-	kit.ta_m = function(type, para, ext) {
+	// 
+	kit.ta_m = function(other) {
 
 		var _doTa = function(fn) {
 			// 如果是数组
-			if (kit.isArray(para) === true) {
-				kit.forEach(para, function(value) {
+			if (kit.isArray(other.para) === true) {
+				kit.forEach(other.para, function(value) {
 					fn(value);
 				});
+			// 如果是对象
 			} else {
-				kit.forEach(para, function(value, key) {
+				kit.forEach(other.para, function(value, key) {
 					if (key !== "" && key !== []) {
 						$(document).on("click", key, function() {
 							if (kit.isArray(value)) {
@@ -477,17 +479,11 @@
 			}
 		};
 
-		switch (type) {
+		switch (other.type) {
 			case 1:
 				// 1模式是页面显示埋点
-				// ["id1", "id2"]
-				// 模式一如果传额外参数仍然只能传一个参数，
-				// 但参数由字符串变为对象，不然我会提示不合法
-				if (kit.isArray(para) === false) {
-					console.info("type1 need input arr");
-					return
-				}
-				kit.forEach(para, function(value) {
+				// 模式一如果传额外参数仍然只能传一个参数，无法扩展
+				kit.forEach(other.para, function(value) {
 					hxmPageStat(value);
 				});
 				break;
@@ -495,9 +491,9 @@
 			case 2:
 				// 2模式是非跳转点击埋点
 				// 对象模式{".class": "id1"}
-				// 数组模式["id1", "id2"] // 用于触发页面位置的埋点
+				// 模式2用于触发页面位置的埋点
 				_doTa(function(value) {
-					hxmClickStat(value, ext);
+					hxmClickStat(value, other.ext);
 				});
 				break;
 
@@ -507,15 +503,15 @@
 				// 所以该事件委托要放在最先执行
 				// {".class": ["id1", "id2"]}
 				_doTa(function() {
-					hxmJumpPageStat(arguments[0], arguments[1], ext);
+					hxmJumpPageStat(arguments[0], arguments[1], other.ext);
 				});
 				break;
 
 			case 4:
-				// 模式4是跳转手炒客户端页
+				// 模式4是跳转手炒客户端
 				// 做法与3类同
 				_doTa(function() {
-					hxmJumpPageStat(arguments[0], arguments[1], extend);
+					hxmJumpPageStat(arguments[0], arguments[1], other.ext);
 				});
 		}
 	};
@@ -1153,6 +1149,39 @@
 		}
 	};
 
+	// 简易模板
+	kit.template = function(str, value, symbol) {
+		
+		// 总模板数据
+		var html = "";
+
+		// 内部循环渲染对象属性方法
+		var _each = function(value, temp) {
+			// 循环对象数据
+			kit.forEach(value, function(value, key){
+				var reg = new RegExp("{{" + key + "}}", 'ig');
+				if (!value) {
+					value = symbol || "--";
+				}
+				temp = temp.replace(reg, value);
+			});
+			return temp;
+		};
+
+		if (kit.isObject(value) === true) {
+			html += _each(value, str);
+		} else if (kit.isArray(value) === true) {
+			// 循环数组
+			kit.forEach(value, function(value) {
+				var temp = str;
+				html += _each(value, temp);
+			})
+		} else {
+			console.info("please input array or object");
+		}
+		return html;
+	};
+
 	// 初始化客户端字体 kit.initFontSize
 	kit.initFontSize = function(size) {
 
@@ -1445,19 +1474,3 @@
 }.call(this));
 
 // 优化第一种埋点的埋点方式,统一改成对象调用，并将类别集成
-
-
-
-// 简易模板
-
-
-
-
-// 客户端匿名机制函数  var newName = kit.encryptName(name);//返回值
-
-// 初始化客户端字体 kit.initFontSize([size]);
-
-// 查询用户登录状态，并给出登录界面	kit.signState()
-
-// 是否登录var flag = kit.signState();// 返回用户名
-// kit.signState(true)// 验证是否登录，登录则不执行代码，还没登录则弹登录框;
