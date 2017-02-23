@@ -282,7 +282,7 @@
 <tr>
         <td>52</td>
 	<td>kit.template(str, value[, symbol])</td> 
-	<td>需要传入一个数组,str是模板字符串, value是渲染数据的【数组】,symbol是无数据展示的内容<a href="https://github.com/Kelichao/kit.js/issues/12"></a></td>
+	<td>需要传入一个数组,str是模板字符串, value是渲染数据的【数组】,symbol是无数据展示的内容<a href="https://github.com/Kelichao/kit.js/issues/12">使用demo</a></td>
 </tr>
 </tbody>
 </table>
