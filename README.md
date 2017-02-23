@@ -264,6 +264,21 @@
 	<td>kit.ta_m(type, para)</td> 
 	<td>移动端埋点<a href="https://github.com/Kelichao/kit.js/issues/10">使用demo</a></td>
 </tr>
+<tr>
+        <td>49</td>
+	<td>kit.encryptName(name)</td> 
+	<td>客户端匿名机制函数,返回 name_as***sj形式的字符串</td>
+</tr>
+<tr>
+        <td>50</td>
+	<td>kit.initFontSize([size])</td> 
+	<td>调整客户端网页字体大小，不填则初始化为1，可填0,1,2,3调整字号</td>
+</tr>
+<tr>
+        <td>51</td>
+	<td>kit.signState([flag])</td> 
+	<td>返回用户名var userName = kit.signState();。kit.signState(true)// 验证是否登录，登录则不执行代码，还没登录则弹登录框;</td>
+</tr>
 </tbody>
 </table>
 
