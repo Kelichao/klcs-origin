@@ -284,6 +284,11 @@
 	<td>kit.template(str, value[, symbol])</td> 
 	<td>需要传入一个数组,str是模板字符串, value是渲染数据的【数组】,symbol是无数据展示的内容<a href="https://github.com/Kelichao/kit.js/issues/12">使用demo</a></td>
 </tr>
+<tr>
+        <td>53</td>
+	<td>kit.mobileType()</td> 
+	<td>判断手机平台iphone(ipad)或gphone</td>
+</tr>
 </tbody>
 </table>
 
