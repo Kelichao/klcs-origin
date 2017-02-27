@@ -381,6 +381,31 @@
 		return document.querySelectorAll(class1);
 	};
 
+	// 判断手机平台iphone(ipad)或gphone
+	kit.mobileType = function () {
+		var type;
+		//获取语言
+		var language = (navigator.browserLanguage || navigator.language).toLowerCase();
+		// 区分函数
+		var _dist = function() {
+            // 获取版本号主要字段
+            var methods = navigator.userAgent;
+            // navigator.appVersion
+            return {
+                iPhone: methods.indexOf("iPhone") != -1 || methods.indexOf("Mac") != -1,
+                iPad: methods.indexOf("iPad") != -1
+            }
+        };
+
+	    if (_dist().iPhone || _dist().iPad) {
+	        type = "iphone";
+	    } else {
+	        type = "gphone";
+	    }
+
+	    return type;
+	};
+
 	// tab切换逻辑块
 	kit.tabToggle = function(elements, _class, fn, state) {
 		$(document).on("click", elements, function() {
@@ -455,17 +480,17 @@
 	// 跳转手炒网页: hxmJumpPageStat(id1, id2)
 	// 跳转手炒客户端页: hxmJumpNativeStat(id1, id2)
 	// 
-	kit.ta_m = function(other) {
+	kit.ta_m = function(total) {
 
 		var _doTa = function(fn) {
 			// 如果是数组
-			if (kit.isArray(other.para) === true) {
-				kit.forEach(other.para, function(value) {
+			if (kit.isArray(total.para) === true) {
+				kit.forEach(total.para, function(value) {
 					fn(value);
 				});
 			// 如果是对象
 			} else {
-				kit.forEach(other.para, function(value, key) {
+				kit.forEach(total.para, function(value, key) {
 					if (key !== "" && key !== []) {
 						$(document).on("click", key, function() {
 							if (kit.isArray(value)) {
@@ -479,11 +504,11 @@
 			}
 		};
 
-		switch (other.type) {
+		switch (total.type) {
 			case 1:
 				// 1模式是页面显示埋点
 				// 模式一如果传额外参数仍然只能传一个参数，无法扩展
-				kit.forEach(other.para, function(value) {
+				kit.forEach(total.para, function(value) {
 					hxmPageStat(value);
 				});
 				break;
@@ -493,7 +518,7 @@
 				// 对象模式{".class": "id1"}
 				// 模式2用于触发页面位置的埋点
 				_doTa(function(value) {
-					hxmClickStat(value, other.ext);
+					hxmClickStat(value, total.ext);
 				});
 				break;
 
@@ -503,7 +528,7 @@
 				// 所以该事件委托要放在最先执行
 				// {".class": ["id1", "id2"]}
 				_doTa(function() {
-					hxmJumpPageStat(arguments[0], arguments[1], other.ext);
+					hxmJumpPageStat(arguments[0], arguments[1], total.ext);
 				});
 				break;
 
@@ -511,7 +536,7 @@
 				// 模式4是跳转手炒客户端
 				// 做法与3类同
 				_doTa(function() {
-					hxmJumpPageStat(arguments[0], arguments[1], other.ext);
+					hxmJumpPageStat(arguments[0], arguments[1], total.ext);
 				});
 		}
 	};
@@ -1161,7 +1186,7 @@
 			kit.forEach(value, function(value, key){
 				var reg = new RegExp("{{" + key + "}}", 'ig');
 				if (!value) {
-					value = symbol || "--";
+					value = symbol || "";
 				}
 				temp = temp.replace(reg, value);
 			});
@@ -1473,4 +1498,7 @@
 
 }.call(this));
 
-// 优化第一种埋点的埋点方式,统一改成对象调用，并将类别集成
+
+// kit.Module 的getter,setter方法
+
+// 滑动到底部触发的事件，滑动到某个元素的高度触发事件
