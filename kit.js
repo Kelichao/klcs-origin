@@ -546,31 +546,31 @@
 	// 用户名加星号
 	kit.encryptName = function(nameparam){
 	     var name = nameparam.toString();
-	     var len = name.length;
-	     var retName = '';
-	     switch(len){
+	     var length = name.length;
+	     var retName = "";
+	     switch(length){
 	         case 1:
 	             retName = name;
 	             break;
 	         case 2:
-	             var nameArr = name.split('');
+	             var nameArr = name.split("");
 	             retName = nameArr[0]+'*';
 	             break;
 	         case 3:
-	             var nameArr = name.split('');
-	             retName = nameArr[0]+'*'+nameArr[len-1];
+	             var nameArr = name.split("");
+	             retName = nameArr[0]+'*'+nameArr[length-1];
 	             break;
 	         case 4:
-	             var nameArr = name.split('');
-	             retName = nameArr[0]+'**'+nameArr[len-1];
+	             var nameArr = name.split("");
+	             retName = nameArr[0]+'**'+nameArr[length-1];
 	             break;
 	         case 5:
-	             var nameArr = name.split('');
-	             retName = nameArr[0]+'***'+nameArr[len-1];
+	             var nameArr = name.split("");
+	             retName = nameArr[0]+'***'+nameArr[length-1];
 	             break;
 	         default:
-	             var nameArr = name.split('');
-	             retName = name.substr(0,len-4)+'***'+nameArr[len-1];
+	             var nameArr = name.split("");
+	             retName = name.substr(0,length-4)+'***'+nameArr[length-1];
 	             break;
 	     }
 
