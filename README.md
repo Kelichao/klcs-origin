@@ -262,7 +262,7 @@
 <tr>
         <td>48</td>
 	<td>kit.ta_m(type, para)</td> 
-	<td>移动端埋点<a href="https://github.com/Kelichao/kit.js/issues/11">使用demo</a></td>
+	<td>移动端埋点<a href="https://github.com/Kelichao/kit.js/issues/10">使用demo</a></td>
 </tr>
 <tr>
         <td>49</td>
