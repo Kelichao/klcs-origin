@@ -290,6 +290,11 @@
 	<td>kit.mobileType()</td> 
 	<td>判断手机平台iphone(ipad)或gphone</td>
 </tr>
+<tr>
+        <td>54</td>
+	<td>kit.serizeArrForm(arr)</td> 
+	<td>序列化jq生成的表单数组</td>
+</tr>
 </tbody>
 </table>
 
