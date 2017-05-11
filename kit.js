@@ -30,7 +30,7 @@
 
 	var push = ArrayProto.push,
 		pop = ArrayProto.pop,
-		href = root.location.href,
+		href = window.location.href,
     	slice = ArrayProto.slice;
 
 	// 安全构造函数法
@@ -273,7 +273,7 @@
 	// aaa=123;bbb=456;ccc=678
 	kit.cookie = function(key,string) {
 
-		var cookie = string || root.document.cookie,
+		var cookie = string || window.document.cookie,
 			total = "";
 		
 		// 如果传入的字符串结尾带了分号(;)，则进行删除    
@@ -1388,6 +1388,16 @@
 				   "&url=http://" + host + url;
 
 		root.location.href = href;
+	};
+
+	// 序列化jq生成的表单数组
+	kit.serizeArrForm = function(arr) {
+	    var total = {};
+
+	    kit.forEach(arr, function(value, key) {
+	        total[arr[key].name] = arr[key].value;
+	    });
+	    return total;
 	};
 
 	// 执行一次的函数包装器
