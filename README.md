@@ -293,7 +293,7 @@
 <tr>
         <td>54</td>
 	<td>kit.serizeArrForm(arr)</td> 
-	<td>序列化jq生成的表单数组</td>
+	<td>序列化jq生成的表单数组，通过$("#Form").serializeArray()方法生成的数组</td>
 </tr>
 </tbody>
 </table>
