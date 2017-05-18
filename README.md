@@ -295,6 +295,11 @@
 	<td>kit.serizeArrForm(arr)</td> 
 	<td>序列化jq生成的表单数组，通过$("#Form").serializeArray()方法生成的数组</td>
 </tr>
+<tr>
+        <td>55</td>
+	<td>kit.triggerSuccessEvun(receive)</td> 
+	<td>ajax请求成功后<a href="https://github.com/Kelichao/Ajax/issues/7">(ajax请求返回格式标准)</a> 传入一个对象 obj = {response: resp,// 数据源  haveData: fn1,// 存在数据,存在数据要分两种情况// 部分无数据与全部有数据 noData:fn2// 不存在数据}    在内部按照事先定好的请求数据格式进行函数的调用</td>
+</tr>
 </tbody>
 </table>
 
