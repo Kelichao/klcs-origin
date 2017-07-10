@@ -4,6 +4,7 @@
  * @update: 2016-11-19
  * @update: 2016-12-28 / 增加了埋点文件以及调用客户端接口文件的方法
  * @update: 2017-01-04 / 增加了MVC架构
+ * @update: 2017-02-25 / 开始增加移动端函数
  * @https://github.com/Kelichao/kit.js
  */
 
@@ -29,7 +30,7 @@
 
 	var push = ArrayProto.push,
 		pop = ArrayProto.pop,
-		href = root.location.href,
+		href = window.location.href,
     	slice = ArrayProto.slice;
 
 	// 安全构造函数法
@@ -272,7 +273,7 @@
 	// aaa=123;bbb=456;ccc=678
 	kit.cookie = function(key,string) {
 
-		var cookie = string || root.document.cookie,
+		var cookie = string || window.document.cookie,
 			total = "";
 		
 		// 如果传入的字符串结尾带了分号(;)，则进行删除    
@@ -545,31 +546,31 @@
 	// 用户名加星号
 	kit.encryptName = function(nameparam){
 	     var name = nameparam.toString();
-	     var len = name.length;
-	     var retName = '';
-	     switch(len){
+	     var length = name.length;
+	     var retName = "";
+	     switch(length){
 	         case 1:
 	             retName = name;
 	             break;
 	         case 2:
-	             var nameArr = name.split('');
+	             var nameArr = name.split("");
 	             retName = nameArr[0]+'*';
 	             break;
 	         case 3:
-	             var nameArr = name.split('');
-	             retName = nameArr[0]+'*'+nameArr[len-1];
+	             var nameArr = name.split("");
+	             retName = nameArr[0]+'*'+nameArr[length-1];
 	             break;
 	         case 4:
-	             var nameArr = name.split('');
-	             retName = nameArr[0]+'**'+nameArr[len-1];
+	             var nameArr = name.split("");
+	             retName = nameArr[0]+'**'+nameArr[length-1];
 	             break;
 	         case 5:
-	             var nameArr = name.split('');
-	             retName = nameArr[0]+'***'+nameArr[len-1];
+	             var nameArr = name.split("");
+	             retName = nameArr[0]+'***'+nameArr[length-1];
 	             break;
 	         default:
-	             var nameArr = name.split('');
-	             retName = name.substr(0,len-4)+'***'+nameArr[len-1];
+	             var nameArr = name.split("");
+	             retName = name.substr(0,length-4)+'***'+nameArr[length-1];
 	             break;
 	     }
 
@@ -1387,6 +1388,16 @@
 				   "&url=http://" + host + url;
 
 		root.location.href = href;
+	};
+
+	// 序列化jq生成的表单数组
+	kit.serizeArrForm = function(arr) {
+	    var total = {};
+
+	    kit.forEach(arr, function(value, key) {
+	        total[arr[key].name] = arr[key].value;
+	    });
+	    return total;
 	};
 
 	// 执行一次的函数包装器
