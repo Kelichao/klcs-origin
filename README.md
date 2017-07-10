@@ -3,6 +3,20 @@
 
 > 方法:借鉴底线库的工具框架，包含一些常用方法，在兼容AMD模式的同时，兼顾了CMD [(链接地址)](http://kelichao.github.io/)
 
+```bash
+
+# 下载依赖
+$ npm install
+
+
+# 开发环境(开启本地热服务)
+$ npm run start
+
+
+# 生产环境(输出压缩后代码)
+$ npm run product
+
+```
 
 > 博客日期2016-10-18
 
