@@ -1,0 +1,76 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+		<style type="text/css">
+			html, body, div, span, applet, object, iframe,
+			h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+			a, abbr, acronym, address, big, cite, code,
+			del, dfn, em, img, ins, kbd, q, s, samp,
+			small, strike, strong, sub, sup, tt, var,
+			b, u, i, center,
+			dl, dt, dd, ol, ul, li,
+			fieldset, form, label, legend,
+			table, caption, tbody, tfoot, thead, tr, th, td,
+			article, aside, canvas, details, embed, 
+			figure, figcaption, footer, header, hgroup, 
+			menu, nav, output, ruby, section, summary,
+			time, mark, audio, video {margin: 0;padding: 0;border: 0;font-size: 100%;font: inherit;vertical-align: baseline;
+			}
+			/* HTML5 display-role reset for older browsers */
+			article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {display: block;
+			}
+			body {line-height: 1;}
+			ol, ul {list-style: none;}
+			blockquote, q {quotes: none;}
+			blockquote:before, blockquote:after,
+			q:before, q:after {content: '';content: none;}
+			table {border-collapse: collapse;border-spacing: 0;}
+			html {height:100%;background-color:#4F7F9B;background:-webkit-gradient(linear,0 0,0 100%,from(#4F7F9B),to(#2A3D56));}
+			body {height:100%;}
+			.header {margin-top:200px;font-size:120px;color:white;text-align:center;position:absolute;left:0;right:0;}
+			.header span{color:#aa314d;display: inline-block;-webkit-transition:all 0.8s;font-family:微软雅黑;font-weight: bold;font-size: 140px;
+			}
+			.header span:hover{text-shadow: 10px 10px 10px 10px white;transform:rotate(-30deg);-ms-transform:rotate(-30deg); 	/* IE 9 */-moz-transform:rotate(-30deg); 	/* Firefox */-webkit-transform:rotate(-30deg); /* Safari 和 Chrome */-o-transform:rotate(-30deg); 	/* Opera */-webkit-transition:all 0.5s;}
+			.header b:hover{text-shadow: 0 0 5px #fff,0 0 10px gray, 0 0 15px gray, 0 0 20px #FF9900, 0 0 35px #FF9900, 0 0 40px #FF9900, 0 0 50px #FF9900, 0 0 75px #FF9900;}
+			.header b{font-family:微软雅黑;color:white;font-weight: normal;-webkit-transition:all 2s;display: inline-block;/*float:left;*/}
+			.content {text-align:center;}
+			.content a{text-decoration:none;border:2px solid white;border-radius:7px;font-family:微软雅黑;display: inline-block;padding: 10px;width: 146px;color:white;font-size:16px;-webkit-transition:all 1s;box-shadow: 1px 1px 1px 1px gray;}
+			.kit {margin-right:50px;color:orange;display: inline-block;position:relative;font-size:40px;padding:15px;border-radius: 10px;border:2px solid orange;font-family:微软雅黑;margin-bottom:50px;float:right;margin-top:50px;text-decoration: none;}
+			.kit-cont:after{display:block;clear:both;content:"";visibility:hidden;height:0;}
+			.kit-con{zoom:1;/*IE6/IE7 HACK*/}
+			.content a:hover{width:170px;text-shadow: 0 0 5px #FFF, 0 0 10px gray, 0 0 15px gray, 0 0 20px #FF9900,0 0 35px #FF9900, 0 0 40px #FF9900, 0 0 50px #FF9900, 0 0 75px #FF9900;}
+			.head{min-width: 600px;display: inline-block;width:600px;}
+			#time{color:white;font-size:42px;font-family:微软雅黑;padding:10px;font-weight: bolder;position:fixed;}
+		</style>
+	</head>
+<body>
+<div id="time"></div>
+<div class="header">
+	<div class="head">
+		<span>K</span><b>elichao</b>
+		<div class="kit-cont">
+			<a title="文件详情" href="https://github.com/Kelichao/kit.js/blob/master/kit.js" class="kit">常用方法工具集合kit.js</a>
+		</div>
+	</div>
+	
+</div>
+<div style="width:100%;height:600px"></div>
+
+
+<div class="content">
+	<a href="https://github.com/Kelichao/kit.js">完整版下载</a>
+</div>
+</body>
+<script type="text/javascript">
+var timeObj = document.getElementById("time");
+setTimeout(function() {
+		var today = new Date();
+		var h = today.getHours().toString().length !== 2 ? "0" + today.getHours() : today.getHours();
+		var m = today.getMinutes().toString().length !== 2 ? "0" + today.getMinutes() : today.getMinutes();
+		var s = today.getSeconds().toString().length !== 2 ? "0" + today.getSeconds() : today.getSeconds();
+		timeObj.innerHTML=h+":"+m+":"+s;
+		timeObj.setAttribute("title", h+":"+m+":"+s);
+	setTimeout(arguments.callee, 1000);
+},1000);
+</script>
+</html>

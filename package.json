@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack"
+    "start": "webpack",
+    "dev": "webpack"
+  },
+  "config": {
+    "port": "8080"
   },
   "author": "",
   "license": "ISC",
