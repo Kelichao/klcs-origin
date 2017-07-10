@@ -542,6 +542,17 @@
 		}
 	};
 
+	// 单例模式，once的改进版
+	kit.getSingle = function(fn) {
+		var result;// 为了存储变量
+		return function(){
+			// 改变this指向
+			// 通过arguments可以将未知的参数按照原样传入
+			return result || (result = fn.apply(this, arguments));
+		};
+	};
+
+
 	// 客户端匿名机制函数
 	// 用户名加星号
 	kit.encryptName = function(nameparam){
@@ -939,7 +950,7 @@
 			kit.mixin(true, temp, add);
 			// 触发
 			$.ajax(temp);
-		}
+		};
 	};
 
 	// 出现错误的时候执行的全局操作
