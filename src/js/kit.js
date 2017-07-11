@@ -1067,6 +1067,40 @@
 		}
 	};
 
+	kit.triggerSuccessEvun = function(receive) {
+		var respText = "",
+			resp = receive.response,
+			noData = receive.noData,
+			haveData = receive.haveData;
+
+		// 第一步，确定返回格式是对象，防止返回是乱码的情况
+		if (kit.isObject(resp)) {
+			respText = "response is object;";
+
+			// 第二步，判断是否存在数据
+			if (resp.returnCode === "0") {
+
+				// 存在数据
+				respText += "existence data;";
+				console.info(respText);
+				haveData(resp.data);
+
+			// 如果存在returnCode(防止resp是个空对象)，且错误码不为0
+			} else if (("returnCode" in resp) && resp.returnCode !== "0") {
+
+				// 不存在数据
+				respText += "no data;";
+				console.info(respText);
+				noData();
+			}
+		} else {
+
+			// 返回不为对象,可能是乱码
+			respText = "response is'not object;";
+			console.warn(respText);
+		}
+	};
+
 	// 是否登录var flag = kit.signState();// 返回用户名
 	// kit.signState(true)// 验证是否登录，登录则不执行代码，还没登录则弹登录框;
 	kit.signState = function(flag) {
@@ -1083,6 +1117,25 @@
 			// 如果没有flag则返回用户名
 			return account;
 		}
+	};
+
+	// 节流
+	kit.throttle = function(callback, time) {
+		var fn = callback;
+
+		return function() {
+			if (fn) {
+				// 保持this指向与参数的正常传递
+				fn.apply(this, arguments);
+
+				// 清空回调
+				fn = null;
+
+				setTimeout(function () {
+					fn = callback;
+				}, time || 1000);
+			}
+		};
 	};
 
 	// 绑定一个倒计时

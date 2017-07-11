@@ -319,6 +319,11 @@ $ npm run product
 	<td>kit.getSingle(fn)</td> 
 	<td>test = kit.getSingle(function(){alert(1); return true});不断触发test只触发一次，注意点是需要return一个true回去</td>
 </tr>
+<tr>
+        <td>57</td>
+	<td>kit.throttle(callback, time)</td> 
+	<td>函数节流（代理模式）需要一定间隔才能再次出发函数 x = kit.throttle(function(a) {console.log(a);}, 2000)</td>
+</tr>
 </tbody>
 </table>
 
