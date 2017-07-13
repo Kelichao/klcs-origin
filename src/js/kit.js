@@ -1570,7 +1570,9 @@
 	    return kit;
 	  });
 	}
+	
 
+	window.proKit = kit;
 }.call(this));
 
 
