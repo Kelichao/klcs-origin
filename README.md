@@ -324,6 +324,11 @@ $ npm run product
 	<td>kit.throttle(callback, time)</td> 
 	<td>函数节流（代理模式）需要一定间隔才能再次出发函数 x = kit.throttle(function(a) {console.log(a);}, 2000)</td>
 </tr>
+<tr>
+        <td>58</td>
+	<td>kit.setViewport(width)</td> 
+	<td>改变移动端的屏幕缩放比，使不同分辨率的屏幕有相同的显示效果</td>
+</tr>
 </tbody>
 </table>
 

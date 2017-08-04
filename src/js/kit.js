@@ -1203,6 +1203,16 @@
 		}
 	};
 
+	// 请求成功状态
+	kit.done = function() {
+
+	};
+
+	// 请求失败状态
+	kit.fail = function() {
+
+	};
+
 	// 简单的promise包装器
 	kit.Promise = function() {
 
@@ -1291,6 +1301,18 @@
 			    }
 			);
 		}
+	};
+
+	// 设置缩放比
+	kit.setViewport = function (width) {
+		var vp = $("meta[name=viewport]")[0];
+		var sw = $(window).width();
+		var stand = 1290 || width;
+		// var sh = window.innerHeight;
+		// var height = 0;
+		
+		var sca = sw / stand;
+		vp.content = "width=device-width, initial-scale="+ sca　+", maximum-scale="+ sca　+", minimum-scale="+ sca　+", user-scalable=no";
 	};
 
 	// 启用underscore 启用Mustache.js类型模板
