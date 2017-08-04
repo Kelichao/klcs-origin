@@ -34,6 +34,7 @@
 	"asdf":true,
 	"window":true, 
 	"require":true,
+	"_": true,
 	"F7": true,
 	"app": true,
 	"i18next": true,
