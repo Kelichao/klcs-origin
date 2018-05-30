@@ -329,6 +329,12 @@ $ npm run product
 	<td>kit.setViewport(width)</td> 
 	<td>改变移动端的屏幕缩放比，使不同分辨率的屏幕有相同的显示效果</td>
 </tr>
+<tr>
+        <td>59</td>
+	<td>kit.objToSearch(obj)</td> 
+	<td>将对象转化成?a=123&b=567这样的形式</td>
+</tr>	
+	objToSearch
 </tbody>
 </table>
 
