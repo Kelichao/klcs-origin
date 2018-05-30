@@ -10,11 +10,8 @@
 
 // 防止undefined被改写
 ;(function(undefined) {
-
 	// root 的值, 客户端为window, 服务端(node) 中为 exports
-	var root = this;
-
-
+	var root = this || window || {} ;
 	var host = document.location.host,
 		// 判断对象类型
 		kind = Object.prototype.toString;
@@ -262,7 +259,7 @@
 	// key为需要取得的键值
 	kit.locaSearch = function(key, address){
 
-		address = address || root.location.search;
+		address = address || location.search;
 		var total = _strToObject(key, address, "&", true);
 	    
 	    // 测试用例kit.locaSearch("fsd","?sfsd=3423&we=234&fsd=324");
@@ -1203,16 +1200,6 @@
 		}
 	};
 
-	// 请求成功状态
-	kit.done = function() {
-
-	};
-
-	// 请求失败状态
-	kit.fail = function() {
-
-	};
-
 	// 简单的promise包装器
 	kit.Promise = function() {
 
@@ -1301,18 +1288,6 @@
 			    }
 			);
 		}
-	};
-
-	// 设置缩放比
-	kit.setViewport = function (width) {
-		var vp = $("meta[name=viewport]")[0];
-		var sw = $(window).width();
-		var stand = 1290 || width;
-		// var sh = window.innerHeight;
-		// var height = 0;
-		
-		var sca = sw / stand;
-		vp.content = "width=device-width, initial-scale="+ sca　+", maximum-scale="+ sca　+", minimum-scale="+ sca　+", user-scalable=no";
 	};
 
 	// 启用underscore 启用Mustache.js类型模板
@@ -1499,6 +1474,29 @@
 			}
 		};
 	};
+
+	// 数组拆分函数
+	kit.arrayGroup = function (arr,number) {
+		var oldArray = arr;
+		var newArray = [];
+		
+		var level = (arr.length / number);
+		for (let i=0; i < level; i++) {
+			newArray.push(oldArray.slice(i * number, (i + 1) * number));
+		}
+	
+		return newArray;
+	};
+
+	// 将对象转成请求参数字符串
+	kit.objToSearch = function(obj) {
+		var str = "?";
+		kit.forEach(obj, (value, key) => {
+			str += (key + "=" + value + "&");
+		});
+
+		return str.slice(0, -1);
+	}
 
 	// 为了能使用OOP形式的调用，将kit的所有方法挂载到原型
 	// 去除不是function类型的。
