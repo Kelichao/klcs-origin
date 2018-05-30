@@ -334,7 +334,6 @@ $ npm run product
 	<td>kit.objToSearch(obj)</td> 
 	<td>将对象转化成?a=123&b=567这样的形式</td>
 </tr>	
-	objToSearch
 </tbody>
 </table>
 
