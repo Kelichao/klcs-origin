@@ -195,11 +195,6 @@ $ npm run product
 	为脚本加载完毕后触发的回调</td>
 </tr>
 <tr>
-        <td>序号</td>
-	<td>kit.underToMustache()</td> 
-	<td>启用Mustache.js类型模板语法，使用{{= }} 这样的语法</td>
-</tr>
-<tr>
         <td>33</td>
 	<td>kit.bind(total, fn)</td> 
 	<td>返回一个绑定this后的函数体，仿原生bind</td>
@@ -334,6 +329,11 @@ $ npm run product
 	<td>kit.objToSearch(obj)</td> 
 	<td>将对象转化成?a=123&b=567这样的形式</td>
 </tr>	
+<tr>
+        <td>60</td>
+	<td>kit.underToMustache()</td> 
+	<td>启用Mustache.js类型模板语法，使用{{= }} 这样的语法</td>
+</tr>
 </tbody>
 </table>
 
