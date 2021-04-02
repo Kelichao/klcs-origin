@@ -1,3 +1,4 @@
+# klcs方法库
 
 ![image](https://cloud.githubusercontent.com/assets/18028533/21641415/a0801094-d2b6-11e6-9cfd-3069b4195042.png)
 
@@ -6,21 +7,15 @@
 ```bash
 
 # 下载依赖
-$ npm install
+$ npm install klcs --save
 
-
-# 开发环境(开启本地热服务)
-$ npm run start
-
-
-# 生产环境(输出压缩后代码)
-$ npm run product
 
 ```
 
 > 博客日期2016-10-18
 
 # kit.js 
+
 <table>
 
 <thead>
@@ -195,6 +190,11 @@ $ npm run product
 	为脚本加载完毕后触发的回调</td>
 </tr>
 <tr>
+        <td>序号</td>
+	<td>kit.underToMustache()</td> 
+	<td>启用Mustache.js类型模板语法，使用{{= }} 这样的语法</td>
+</tr>
+<tr>
         <td>33</td>
 	<td>kit.bind(total, fn)</td> 
 	<td>返回一个绑定this后的函数体，仿原生bind</td>
@@ -323,16 +323,6 @@ $ npm run product
         <td>58</td>
 	<td>kit.setViewport(width)</td> 
 	<td>改变移动端的屏幕缩放比，使不同分辨率的屏幕有相同的显示效果</td>
-</tr>
-<tr>
-        <td>59</td>
-	<td>kit.objToSearch(obj)</td> 
-	<td>将对象转化成?a=123&b=567这样的形式</td>
-</tr>	
-<tr>
-        <td>60</td>
-	<td>kit.underToMustache()</td> 
-	<td>启用Mustache.js类型模板语法，使用{{= }} 这样的语法</td>
 </tr>
 </tbody>
 </table>
