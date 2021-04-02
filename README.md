@@ -333,5 +333,15 @@ $ npm run product
 	<td>kit.underToMustache()</td> 
 	<td>启用Mustache.js类型模板语法，使用{{= }} 这样的语法</td>
 </tr>
+	<tr>
+			<td>61</td>
+			<td>kit._</td>
+			<td>继承底线库underscore方法</td>
+		</tr>
+		<tr>
+			<td>62</td>
+			<td>kit.$</td>
+			<td>继承jQuery v3 方法</td>
+		</tr>
 </tbody>
 </table>
