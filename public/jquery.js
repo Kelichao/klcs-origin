@@ -10870,3 +10870,6 @@ if ( typeof noGlobal === "undefined" ) {
 
 return jQuery;
 } );
+
+
+export default  jQuery;
